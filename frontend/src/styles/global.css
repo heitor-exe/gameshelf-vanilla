@@ -1,0 +1,75 @@
+/* Reset and base */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  min-height: 100vh;
+  font-family: var(--font-family);
+  background-color: var(--color-surface);
+  color: var(--color-on-surface);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Global Rules */
+
+/* 
+  No 1px solid borders for sectioning 
+  — use background color shifts between surface levels 
+*/
+.surface-low {
+  background-color: var(--color-surface-low);
+}
+.surface-container {
+  background-color: var(--color-surface-container);
+}
+.surface-high {
+  background-color: var(--color-surface-high);
+}
+.surface-bright {
+  background-color: var(--color-surface-bright);
+}
+
+/* 
+  Floating elements use background: var(--color-surface-container) 
+  with backdrop-filter: blur(20px) and 60% opacity 
+*/
+.floating-element {
+  background-color: rgba(26, 25, 25, 0.6); /* --color-surface-container at 60% opacity */
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* 
+  Primary CTAs use linear-gradient(135deg, var(--color-primary-dim), var(--color-primary)) 
+*/
+.btn-primary {
+  background: linear-gradient(135deg, var(--color-primary-dim), var(--color-primary));
+  color: var(--color-surface);
+  border: none;
+  font-family: var(--font-family);
+  font-weight: 700;
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  padding: 0.5rem 1rem;
+}
+
+/* 
+  Game cover art must always be edge-to-edge in cards with no padding 
+*/
+.card {
+  background-color: var(--color-surface-container);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.card img.cover-art {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}

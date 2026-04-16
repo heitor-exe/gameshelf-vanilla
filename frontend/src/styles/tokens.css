@@ -1,0 +1,21 @@
+:root {
+  --color-surface: #0e0e0e;
+  --color-surface-low: #131313;
+  --color-surface-container: #1a1919;
+  --color-surface-high: #201f1f;
+  --color-surface-bright: #2c2c2c;
+  --color-primary: #cf96ff;
+  --color-primary-dim: #a533ff;
+  --color-secondary: #e699fd;
+  --color-outline: #767575;
+  --color-outline-variant: #484847;
+  --color-on-surface: #ffffff;
+  --color-on-surface-variant: #adaaaa;
+
+  --font-family: 'Inter', sans-serif;
+
+  --radius-sm: 0.125rem;
+  --radius-md: 0.25rem;
+  --radius-lg: 0.5rem;
+  --radius-full: 0.75rem;
+}
