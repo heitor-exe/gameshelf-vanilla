@@ -37,7 +37,7 @@ const MOCK_FEED = [
     username: "NoobMaster69",
     avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Noob",
     game_title: "Elden Magic",
-    game_cover: "https://images.unsplash.com/photo-1605806616949-1e87b487cb2a?q=80&w=1000",
+    game_cover: "/assets/elden_magic.png",
     game_genres: "RPG • Fantasy",
     timestamp: "2 days ago"
   }
