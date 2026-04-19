@@ -109,7 +109,7 @@ export function renderSearch(container) {
       `;
       // Open Modal event
       card.addEventListener('click', () => {
-        openModal(game);
+        openModal(game, window.onSave);
       });
       gridContainer.appendChild(card);
     });

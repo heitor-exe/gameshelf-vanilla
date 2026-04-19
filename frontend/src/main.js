@@ -1,5 +1,13 @@
 import { renderHome } from './pages/home.js';
 import { renderSearch } from './pages/search.js';
+import { renderShelf } from './pages/shelf.js';
+import { renderProfile } from './pages/profile.js';
+import { addGameToShelf } from './lib/shelf-store.js';
+
+window.onSave = (data) => {
+  addGameToShelf(data);
+  console.log('Game saved to shelf:', data);
+};
 
 const app = document.getElementById('app');
 
@@ -8,6 +16,10 @@ function route() {
   const path = window.location.pathname;
   if (path === '/search') {
     renderSearch(app);
+  } else if (path === '/shelf') {
+    renderShelf(app);
+  } else if (path === '/profile') {
+    renderProfile(app);
   } else {
     // Default to home
     renderHome(app);
