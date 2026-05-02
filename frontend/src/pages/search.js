@@ -304,13 +304,16 @@ export function renderSearch(container) {
 
   document.addEventListener("keydown", handleKeydown);
 
-  // Renderização inicial
-  // setTimeout(fn, 0) adia a execução para depois do call stack atual,
-  // garantindo que o container já esteja no DOM antes de chamar focus().
-  // Sem isso, input.focus() pode ser ignorado em alguns browsers.
-  setTimeout(() => {
-    renderGrid();
+  // Renderização inicial — síncrona para evitar flash de grid vazio.
+  // renderGrid() pode rodar imediatamente porque gridContainer já está no DOM
+  // (foi appendado algumas linhas acima).
+  renderGrid();
 
+  // focus() e setSelectionRange() precisam ser adiados com setTimeout(fn, 0):
+  // alguns browsers ignoram .focus() se chamado durante o mesmo tick em que o
+  // elemento foi inserido no documento. O adiamento garante que o browser já
+  // finalizou o layout antes de tentarmos mover o foco.
+  setTimeout(() => {
     if (window.location.pathname === "/search") {
       input.focus();
 
