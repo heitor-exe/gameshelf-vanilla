@@ -94,3 +94,13 @@ export function addGameToShelf(game) {
 export function getGameByShelfId(id) {
   return _games.find(g => g.id === id);
 }
+
+export function removeGameFromShelf(id) {
+  const index = _games.findIndex(g => g.id === id);
+  if (index !== -1) {
+    _games.splice(index, 1);
+    saveToStorage();
+    return true;
+  }
+  return false;
+}

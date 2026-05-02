@@ -1251,6 +1251,36 @@
     transform: translateY(0);
 }
 
+.ams-footer {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.ams-delete-btn {
+    flex: 0 0 auto;
+    background: transparent;
+    color: #ff6b6b;
+    border: 2px solid #ff6b6b;
+    font-family: var(--font-family);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    padding: 0.85rem 1rem;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+.ams-delete-btn:hover {
+    background: #ff6b6b;
+    color: #fff;
+}
+
+.ams-save-btn {
+    flex: 1;
+}
+
 @media (max-width: 768px) {
     .ams-overlay {
         padding: 0;

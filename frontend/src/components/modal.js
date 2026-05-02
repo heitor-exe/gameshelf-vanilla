@@ -1,7 +1,9 @@
 let overlay = null;
 
-export function openModal(game, onSave) {
+export function openModal(game, onSave, onDelete) {
   if (overlay) document.body.removeChild(overlay);
+
+  const isEditMode = typeof onDelete === "function";
 
   const genresHTML = game.genres
     ? game.genres
@@ -51,7 +53,8 @@ export function openModal(game, onSave) {
       </div>
 
       <div class="ams-footer">
-        <button class="ams-save-btn">SAVE TO SHELF</button>
+        ${isEditMode ? `<button class="ams-delete-btn">REMOVE FROM SHELF</button>` : ''}
+        <button class="ams-save-btn">${isEditMode ? 'UPDATE' : 'SAVE TO SHELF'}</button>
       </div>
     </div>
   `;
@@ -118,6 +121,19 @@ export function openModal(game, onSave) {
       onSave(data);
     }
   });
+
+  // Delete button
+  if (isEditMode) {
+    overlay.querySelector(".ams-delete-btn").addEventListener("click", () => {
+      if (confirm(`Tem certeza que deseja remover "${game.title}" da sua shelf?`)) {
+        console.log("[modal] deleted:", game.id);
+        closeModal();
+        if (typeof onDelete === "function") {
+          onDelete(game.id);
+        }
+      }
+    });
+  }
 
   // Escape key
   const onKeyDown = (e) => {

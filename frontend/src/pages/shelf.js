@@ -1,5 +1,6 @@
 import { createNavbar } from '../components/navbar.js';
-import { getShelfGames } from '../lib/shelf-store.js';
+import { openModal } from '../components/modal.js';
+import { getShelfGames, addGameToShelf, removeGameFromShelf } from '../lib/shelf-store.js';
 
 const TABS = [
   { id: "playing", label: "PLAYING" },
@@ -17,9 +18,10 @@ function generateStars(rating) {
   return `<div class="review-stars">${stars}</div>`;
 }
 
-function createShelfGameCard(game) {
+function createShelfGameCard(game, onEdit, onDelete) {
   const card = document.createElement("article");
   card.className = "shelf-game-card";
+  card.style.cursor = "pointer";
   
   card.innerHTML = `
     <div class="shelf-cover-wrapper">
@@ -35,6 +37,10 @@ function createShelfGameCard(game) {
       ${game.review_snippet ? `<p class="shelf-review-snippet">${game.review_snippet}</p>` : ''}
     </div>
   `;
+
+  card.addEventListener("click", () => {
+    openModal(game, onEdit, onDelete);
+  });
   
   return card;
 }
@@ -57,29 +63,31 @@ export function renderShelf(container) {
   `;
   pageContainer.appendChild(header);
 
-  const stats = document.createElement("div");
-  stats.className = "shelf-stats";
-  
-  const games = getShelfGames();
-  const totalGames = games.length;
-  const topGenre = "RPG";
-  const completedCount = games.filter(g => g.status === 'completed').length;
-  
-  stats.innerHTML = `
-    <div class="stat-box">
-      <span class="stat-value">${totalGames}</span>
-      <span class="stat-label">TOTAL GAMES</span>
-    </div>
-    <div class="stat-box">
-      <span class="stat-value" style="color: var(--color-primary)">${topGenre}</span>
-      <span class="stat-label">TOP GENRE</span>
-    </div>
-    <div class="stat-box">
-      <span class="stat-value">${completedCount}</span>
-      <span class="stat-label">COMPLETED '25</span>
-    </div>
-  `;
-  pageContainer.appendChild(stats);
+  const statsEl = document.createElement("div");
+  statsEl.className = "shelf-stats";
+
+  function updateStats() {
+    const games = getShelfGames();
+    const totalGames = games.length;
+    const topGenre = "RPG";
+    const completedCount = games.filter(g => g.status === 'completed').length;
+    statsEl.innerHTML = `
+      <div class="stat-box">
+        <span class="stat-value">${totalGames}</span>
+        <span class="stat-label">TOTAL GAMES</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-value" style="color: var(--color-primary)">${topGenre}</span>
+        <span class="stat-label">TOP GENRE</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-value">${completedCount}</span>
+        <span class="stat-label">COMPLETED '25</span>
+      </div>
+    `;
+  }
+
+  pageContainer.appendChild(statsEl);
 
   const tabsContainer = document.createElement("div");
   tabsContainer.className = "shelf-tabs";
@@ -93,7 +101,19 @@ export function renderShelf(container) {
     gamesGrid.innerHTML = "";
     const filteredGames = getShelfGames().filter(g => g.status === filterStatus);
     filteredGames.forEach(game => {
-      gamesGrid.appendChild(createShelfGameCard(game));
+      gamesGrid.appendChild(createShelfGameCard(
+        game,
+        (updatedData) => {
+          addGameToShelf(updatedData);
+          updateStats();
+          renderGrid(currentTab);
+        },
+        (gameId) => {
+          removeGameFromShelf(gameId);
+          updateStats();
+          renderGrid(currentTab);
+        }
+      ));
     });
   }
 
@@ -113,6 +133,7 @@ export function renderShelf(container) {
   pageContainer.appendChild(tabsContainer);
   pageContainer.appendChild(gamesGrid);
 
+  updateStats();
   renderGrid(currentTab);
 
   const fab = document.createElement("a");
