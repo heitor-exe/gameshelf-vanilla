@@ -1,5 +1,6 @@
 import { createNavbar } from "../components/navbar.js";
 import { getShelfGames } from "../lib/shelf-store.js";
+import { openViewAllModal } from "../components/modal.js";
 
 const MOCK_PROFILE = {
   username: "heitor-exe",
@@ -209,6 +210,14 @@ export function renderProfile(container, username = "Macedhe") {
     </div>
   `;
   pageContainer.appendChild(playingSection);
+
+  // O botão mantém o contexto de "Currently Playing" ao abrir,
+  // mas envia todos os jogos da shelf para o modal poder alternar entre categorias.
+  const viewAllBtn = playingSection.querySelector(".view-all-btn");
+  viewAllBtn.addEventListener("click", () => {
+    // initialStatus define qual aba será exibida primeiro dentro do popup.
+    openViewAllModal(allGames, { initialStatus: "playing" });
+  });
 
   // Recently Reviewed Section
   const reviewsSection = document.createElement("section");

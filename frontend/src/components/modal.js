@@ -53,8 +53,8 @@ export function openModal(game, onSave, onDelete) {
       </div>
 
       <div class="ams-footer">
-        ${isEditMode ? `<button class="ams-delete-btn">REMOVE FROM SHELF</button>` : ''}
-        <button class="ams-save-btn">${isEditMode ? 'UPDATE' : 'SAVE TO SHELF'}</button>
+        ${isEditMode ? `<button class="ams-delete-btn">REMOVE FROM SHELF</button>` : ""}
+        <button class="ams-save-btn">${isEditMode ? "UPDATE" : "SAVE TO SHELF"}</button>
       </div>
     </div>
   `;
@@ -125,7 +125,9 @@ export function openModal(game, onSave, onDelete) {
   // Delete button
   if (isEditMode) {
     overlay.querySelector(".ams-delete-btn").addEventListener("click", () => {
-      if (confirm(`Tem certeza que deseja remover "${game.title}" da sua shelf?`)) {
+      if (
+        confirm(`Tem certeza que deseja remover "${game.title}" da sua shelf?`)
+      ) {
         console.log("[modal] deleted:", game.id);
         closeModal();
         if (typeof onDelete === "function") {
@@ -149,4 +151,253 @@ export function closeModal() {
   overlay.remove();
   overlay = null;
   document.body.style.overflow = "";
+}
+
+// Centraliza os metadados de cada categoria da shelf para reutilizar
+// o mesmo modal com títulos, descrições e mensagens vazias coerentes.
+const VIEW_ALL_STATUS_META = {
+  playing: {
+    label: "Currently Playing",
+    helper: "Games you are actively playing right now.",
+    emptyTitle: "Nothing in your playing queue yet",
+    emptyCopy:
+      "Add a game to your shelf and mark it as playing to see it here.",
+  },
+  completed: {
+    label: "Completed",
+    helper: "Finished games with your latest thoughts attached.",
+    emptyTitle: "No completed games yet",
+    emptyCopy:
+      "Once you finish a game and update its status, it will appear here.",
+  },
+  dropped: {
+    label: "Dropped",
+    helper: "Games you decided to put down for now.",
+    emptyTitle: "No dropped games",
+    emptyCopy:
+      "If a game is not working for you, mark it as dropped and it will show up here.",
+  },
+  wishlist: {
+    label: "Wishlist",
+    helper: "Games you want to play next.",
+    emptyTitle: "Your wishlist is empty",
+    emptyCopy: "Save upcoming games to your wishlist and browse them here.",
+  },
+};
+
+// Normaliza os jogos vindos da shelf para um formato único no modal,
+// evitando tratar diferenças de nome de propriedade durante a renderização.
+function normalizeViewAllGame(game) {
+  return {
+    id: game.id,
+    title: game.title || game.game_title || "Unknown Title",
+    developer: game.developer || "Unknown studio",
+    status: game.status || "playing",
+    rating: Number(game.rating) || 0,
+    review: (game.review_snippet || game.review || "").trim(),
+    cover: game.cover_url || game.cover || game.background_image || "",
+  };
+}
+
+// Busca o conteúdo textual da categoria selecionada.
+function getStatusMeta(status) {
+  return VIEW_ALL_STATUS_META[status] || VIEW_ALL_STATUS_META.playing;
+}
+
+// Limita o tamanho do review para manter os cards equilibrados visualmente.
+function truncateReview(text, maxLength = 160) {
+  if (!text) return "";
+  if (text.length <= maxLength) return text;
+  return `${text.slice(0, maxLength).trimEnd()}...`;
+}
+
+// Converte a nota numérica salva na shelf em estrelas visuais.
+function renderRatingStars(rating) {
+  if (!rating) return "";
+  return `${"★".repeat(rating)}${"☆".repeat(Math.max(0, 5 - rating))}`;
+}
+
+// Abre o modal de visualização completa da shelf.
+// Ele aceita todos os jogos e permite escolher internamente a categoria ativa.
+export function openViewAllModal(games = [], optionsOrOnClose = {}) {
+  let viewAllOverlay = document.createElement("div");
+  viewAllOverlay.className = "ams-overlay";
+
+  // Mantém compatibilidade com a assinatura antiga, que podia receber apenas onClose.
+  const options =
+    typeof optionsOrOnClose === "function"
+      ? { onClose: optionsOrOnClose }
+      : optionsOrOnClose || {};
+
+  // Os dados são normalizados uma vez para simplificar os filtros e a montagem dos cards.
+  const normalizedGames = games.map(normalizeViewAllGame);
+  let activeStatus =
+    options.initialStatus && VIEW_ALL_STATUS_META[options.initialStatus]
+      ? options.initialStatus
+      : "playing";
+
+  viewAllOverlay.innerHTML = `
+    <div class="ams-card view-all-modal">
+      <div class="view-all-header">
+        <div class="view-all-heading-group">
+          <span class="view-all-kicker">Shelf Overview</span>
+          <h2 class="view-all-title">Browse your games by shelf category</h2>
+          <p class="view-all-subtitle">
+            Start with what you are currently playing, then switch categories to revisit your completed, dropped, and wishlist entries.
+          </p>
+        </div>
+        <button class="ams-close" aria-label="Close">&times;</button>
+      </div>
+
+      <div class="view-all-filters" role="tablist" aria-label="Shelf categories"></div>
+
+      <div class="view-all-body">
+        <div class="view-all-summary-card">
+          <span class="view-all-summary-label">Selected category</span>
+          <div class="view-all-summary-content">
+            <div>
+              <h3 class="view-all-summary-title"></h3>
+              <p class="view-all-summary-copy"></p>
+            </div>
+            <span class="view-all-summary-count"></span>
+          </div>
+        </div>
+        <div class="view-all-content"></div>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(viewAllOverlay);
+  document.body.style.overflow = "hidden";
+
+  // Referências aos nós que serão atualizados dinamicamente sempre que o usuário
+  // trocar de categoria dentro do popup.
+  const filtersContainer = viewAllOverlay.querySelector(".view-all-filters");
+  const summaryTitle = viewAllOverlay.querySelector(".view-all-summary-title");
+  const summaryCopy = viewAllOverlay.querySelector(".view-all-summary-copy");
+  const summaryCount = viewAllOverlay.querySelector(".view-all-summary-count");
+  const contentContainer = viewAllOverlay.querySelector(".view-all-content");
+
+  // Renderiza os botões das categorias mostrando também a quantidade de jogos em cada uma.
+  function buildFilters() {
+    filtersContainer.innerHTML = Object.entries(VIEW_ALL_STATUS_META)
+      .map(([status, meta]) => {
+        const count = normalizedGames.filter(
+          (game) => game.status === status,
+        ).length;
+        const isActive = status === activeStatus;
+        return `
+          <button
+            class="view-all-filter-btn${isActive ? " is-active" : ""}"
+            type="button"
+            role="tab"
+            aria-selected="${isActive}"
+            data-status="${status}"
+          >
+            <span class="view-all-filter-label">${meta.label}</span>
+            <span class="view-all-filter-count">${count}</span>
+          </button>
+        `;
+      })
+      .join("");
+  }
+
+  // Monta o card individual com capa, status, nota e review curto do usuário.
+  function buildCard(game) {
+    const review = truncateReview(game.review);
+    return `
+      <article class="view-all-game-card">
+        <div class="view-all-cover-wrapper">
+          <img
+            src="${game.cover}"
+            alt="${game.title}"
+            class="view-all-cover"
+            onerror="this.style.display='none'"
+          />
+        </div>
+
+        <div class="view-all-card-body">
+          <div class="view-all-card-top">
+            <span class="view-all-status-pill">${getStatusMeta(game.status).label}</span>
+            ${game.rating ? `<span class="view-all-rating">${renderRatingStars(game.rating)}</span>` : ""}
+          </div>
+
+          <div class="view-all-card-copy">
+            <h3 class="view-all-game-title">${game.title}</h3>
+            <span class="view-all-game-dev">${game.developer}</span>
+          </div>
+
+          <div class="view-all-review-block">
+            <span class="view-all-review-label">Your review</span>
+            <p class="view-all-review">
+              ${review || "You have not added a review snippet for this game yet."}
+            </p>
+          </div>
+        </div>
+      </article>
+    `;
+  }
+
+  // Atualiza o resumo e a grade de jogos da categoria atualmente selecionada.
+  function renderActiveCategory() {
+    const meta = getStatusMeta(activeStatus);
+    const filteredGames = normalizedGames.filter(
+      (game) => game.status === activeStatus,
+    );
+
+    summaryTitle.textContent = meta.label;
+    summaryCopy.textContent = meta.helper;
+    summaryCount.textContent = `${filteredGames.length} game${filteredGames.length === 1 ? "" : "s"}`;
+
+    if (!filteredGames.length) {
+      contentContainer.innerHTML = `
+        <div class="view-all-empty">
+          <h3 class="view-all-empty-title">${meta.emptyTitle}</h3>
+          <p class="view-all-empty-copy">${meta.emptyCopy}</p>
+        </div>
+      `;
+      return;
+    }
+
+    contentContainer.innerHTML = `
+      <div class="view-all-grid">
+        ${filteredGames.map(buildCard).join("")}
+      </div>
+    `;
+  }
+
+  // Render inicial do modal já focando na categoria escolhida ao abrir.
+  buildFilters();
+  renderActiveCategory();
+
+  // Troca de aba/categoria sem reabrir o modal.
+  filtersContainer.addEventListener("click", (event) => {
+    const button = event.target.closest(".view-all-filter-btn");
+    if (!button) return;
+
+    activeStatus = button.dataset.status;
+    buildFilters();
+    renderActiveCategory();
+  });
+
+  // Fecha o modal e restaura o scroll do documento.
+  function close() {
+    if (!viewAllOverlay) return;
+    document.removeEventListener("keydown", onKeyDown);
+    viewAllOverlay.remove();
+    viewAllOverlay = null;
+    document.body.style.overflow = "";
+    if (typeof options.onClose === "function") options.onClose();
+  }
+
+  viewAllOverlay.querySelector(".ams-close").addEventListener("click", close);
+  viewAllOverlay.addEventListener("click", (e) => {
+    if (e.target === viewAllOverlay) close();
+  });
+
+  const onKeyDown = (e) => {
+    if (e.key === "Escape") close();
+  };
+  viewAllOverlay._onKeyDown = onKeyDown;
+  document.addEventListener("keydown", onKeyDown);
 }
