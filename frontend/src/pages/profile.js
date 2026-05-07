@@ -1,12 +1,12 @@
-import { createNavbar } from "../components/navbar.js";
-import { getShelfGames } from "../lib/shelf-store.js";
-import { openViewAllModal } from "../components/modal.js";
+import { createNavbar } from '../components/navbar.js';
+import { getShelfGames } from '../lib/shelf-store.js';
+import { openViewAllModal } from '../components/modal.js';
 
 const MOCK_PROFILE = {
-  username: "heitor-exe",
-  avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Macedhe",
-  bio: "RPG enthusiast. Soulslike survivor. Always chasing the next platinum.",
-  memberSince: "2024-03-15",
+  username: 'heitor-exe',
+  avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Macedhe',
+  bio: 'RPG enthusiast. Soulslike survivor. Always chasing the next platinum.',
+  memberSince: '2024-03-15',
   stats: {
     total: 128,
     completed: 42,
@@ -16,45 +16,39 @@ const MOCK_PROFILE = {
 
 const MOCK_CURRENTLY_PLAYING = [
   {
-    game_title: "Elden Ring",
-    cover_url:
-      "https://images.unsplash.com/photo-1605901309584-818e25960b8f?q=80&w=400",
-    developer: "FromSoftware",
+    game_title: 'Elden Ring',
+    cover_url: 'https://images.unsplash.com/photo-1605901309584-818e25960b8f?q=80&w=400',
+    developer: 'FromSoftware',
   },
   {
-    game_title: "Cyberpunk 2077",
-    cover_url:
-      "https://images.unsplash.com/photo-1614294148960-9aa740632a87?q=80&w=400",
-    developer: "CD Projekt Red",
+    game_title: 'Cyberpunk 2077',
+    cover_url: 'https://images.unsplash.com/photo-1614294148960-9aa740632a87?q=80&w=400',
+    developer: 'CD Projekt Red',
   },
   {
-    game_title: "Hades II",
-    cover_url:
-      "https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=400",
-    developer: "Supergiant Games",
+    game_title: 'Hades II',
+    cover_url: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=400',
+    developer: 'Supergiant Games',
   },
   {
     game_title: "Dragon's Dogma 2",
-    cover_url:
-      "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=400",
-    developer: "Capcom",
+    cover_url: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=400',
+    developer: 'Capcom',
   },
 ];
 
 const MOCK_REVIEWS = [
   {
-    game_title: "Hollow Knight",
-    cover_url:
-      "https://images.unsplash.com/photo-1628155930542-3c7a64e2c833?q=80&w=600",
+    game_title: 'Hollow Knight',
+    cover_url: 'https://images.unsplash.com/photo-1628155930542-3c7a64e2c833?q=80&w=600',
     starRating: 5,
     daysAgo: 3,
     reviewText:
-      "The best metroidvania ever made. Team Cherry delivered something truly special — perfect combat, breathtaking art, and an atmosphere that keeps you exploring every corner. The White Palace nearly broke me, but the satisfaction was worth every death.",
+      'The best metroidvania ever made. Team Cherry delivered something truly special — perfect combat, breathtaking art, and an atmosphere that keeps you exploring every corner. The White Palace nearly broke me, but the satisfaction was worth every death.',
   },
   {
-    game_title: "Starfield",
-    cover_url:
-      "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=600",
+    game_title: 'Starfield',
+    cover_url: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=600',
     starRating: 2,
     daysAgo: 12,
     reviewText:
@@ -62,44 +56,42 @@ const MOCK_REVIEWS = [
   },
   {
     game_title: "Baldur's Gate 3",
-    cover_url:
-      "https://images.unsplash.com/photo-1534423861386-85a16f5d13fd?q=80&w=600",
+    cover_url: 'https://images.unsplash.com/photo-1534423861386-85a16f5d13fd?q=80&w=600',
     starRating: 5,
     daysAgo: 28,
     reviewText:
-      "A new standard for RPGs. Larian crafted something unprecedented — every decision matters, every character feels real. The epilogue update made it even better. This is what gaming should be.",
+      'A new standard for RPGs. Larian crafted something unprecedented — every decision matters, every character feels real. The epilogue update made it even better. This is what gaming should be.',
   },
   {
-    game_title: "Final Fantasy VII Rebirth",
-    cover_url:
-      "https://images.unsplash.com/photo-1534423861386-85a16f5d13fd?q=80&w=600",
+    game_title: 'Final Fantasy VII Rebirth',
+    cover_url: 'https://images.unsplash.com/photo-1534423861386-85a16f5d13fd?q=80&w=600',
     starRating: 4,
     daysAgo: 45,
     reviewText:
-      "A worthy sequel that expands on Remake in every way. The open world sections are hit or miss, but the combat and character moments are phenomenal. Chapter 12 alone is worth the price of admission.",
+      'A worthy sequel that expands on Remake in every way. The open world sections are hit or miss, but the combat and character moments are phenomenal. Chapter 12 alone is worth the price of admission.',
   },
 ];
 
 function generateStars(rating) {
-  let stars = "";
+  let stars = '';
   for (let i = 0; i < 5; i++) {
-    stars += i < rating ? "★" : "☆";
+    stars += i < rating ? '★' : '☆';
   }
   return stars;
 }
 
 function formatDate(dateString) {
   const date = new Date(dateString);
-  const options = { month: "short", year: "numeric" };
-  return date.toLocaleDateString("en-US", options);
+  const options = { month: 'short', year: 'numeric' };
+  return date.toLocaleDateString('en-US', options);
 }
 
 function createGameCard(game) {
-  const card = document.createElement("article");
-  card.className = "current-game-card";
+  const card = document.createElement('article');
+  card.className = 'current-game-card';
 
-  const title = game.title || game.game_title || "Unknown Title";
-  const developer = game.developer || "";
+  const title = game.title || game.game_title || 'Unknown Title';
+  const developer = game.developer || '';
 
   card.innerHTML = `
     <div class="current-cover-wrapper">
@@ -115,9 +107,9 @@ function createGameCard(game) {
 }
 
 function createReviewCard(review, index) {
-  const card = document.createElement("article");
+  const card = document.createElement('article');
   const isOdd = index % 2 === 1;
-  const altLayout = isOdd ? "layout-cover-left" : "layout-cover-right";
+  const altLayout = isOdd ? 'layout-cover-left' : 'layout-cover-right';
 
   card.className = `review-card ${altLayout}`;
 
@@ -139,8 +131,8 @@ function createReviewCard(review, index) {
   return card;
 }
 
-export function renderProfile(container, username = "Macedhe") {
-  container.innerHTML = "";
+export function renderProfile(container, username = 'Macedhe') {
+  container.innerHTML = '';
 
   const navbar = createNavbar();
   container.appendChild(navbar);
@@ -150,19 +142,19 @@ export function renderProfile(container, username = "Macedhe") {
     ...MOCK_PROFILE,
     stats: {
       total: allGames.length,
-      completed: allGames.filter((g) => g.status === "completed").length,
-      wishlist: allGames.filter((g) => g.status === "wishlist").length,
+      completed: allGames.filter((g) => g.status === 'completed').length,
+      wishlist: allGames.filter((g) => g.status === 'wishlist').length,
     },
   };
-  const playing = allGames.filter((g) => g.status === "playing");
+  const playing = allGames.filter((g) => g.status === 'playing');
   const reviews = MOCK_REVIEWS;
 
-  const pageContainer = document.createElement("div");
-  pageContainer.className = "page-container profile-page";
+  const pageContainer = document.createElement('div');
+  pageContainer.className = 'page-container profile-page';
 
   // Header Section
-  const header = document.createElement("header");
-  header.className = "profile-header";
+  const header = document.createElement('header');
+  header.className = 'profile-header';
   header.innerHTML = `
     <div class="profile-avatar-col">
       <img src="${profile.avatar}" alt="${profile.username}" class="profile-avatar">
@@ -193,8 +185,8 @@ export function renderProfile(container, username = "Macedhe") {
   pageContainer.appendChild(header);
 
   // Currently Playing Section
-  const playingSection = document.createElement("section");
-  playingSection.className = "profile-section playing-section";
+  const playingSection = document.createElement('section');
+  playingSection.className = 'profile-section playing-section';
   playingSection.innerHTML = `
     <div class="section-header">
       <h2 class="section-title">Currently Playing</h2>
@@ -206,35 +198,34 @@ export function renderProfile(container, username = "Macedhe") {
           const card = createGameCard(game);
           return card.outerHTML;
         })
-        .join("")}
+        .join('')}
     </div>
   `;
   pageContainer.appendChild(playingSection);
 
-  // O botão mantém o contexto de "Currently Playing" ao abrir,
-  // mas envia todos os jogos da shelf para o modal poder alternar entre categorias.
-  const viewAllBtn = playingSection.querySelector(".view-all-btn");
-  viewAllBtn.addEventListener("click", () => {
-    // initialStatus define qual aba será exibida primeiro dentro do popup.
-    openViewAllModal(allGames, { initialStatus: "playing" });
+  // O botão abre o modal mostrando todos os jogos da shelf por padrão.
+  // As categorias continuam disponíveis no popup e passam a atuar como filtros opcionais.
+  const viewAllBtn = playingSection.querySelector('.view-all-btn');
+  viewAllBtn.addEventListener('click', () => {
+    openViewAllModal(allGames);
   });
 
   // Recently Reviewed Section
-  const reviewsSection = document.createElement("section");
-  reviewsSection.className = "profile-section reviews-section";
+  const reviewsSection = document.createElement('section');
+  reviewsSection.className = 'profile-section reviews-section';
   reviewsSection.innerHTML = `
     <div class="section-header">
       <h2 class="section-title">Recently Reviewed</h2>
     </div>
     <div class="reviews-list">
-      ${reviews.map((review, i) => createReviewCard(review, i).outerHTML).join("")}
+      ${reviews.map((review, i) => createReviewCard(review, i).outerHTML).join('')}
     </div>
   `;
   pageContainer.appendChild(reviewsSection);
 
   // Footer / Share Section
-  const footer = document.createElement("footer");
-  footer.className = "profile-footer";
+  const footer = document.createElement('footer');
+  footer.className = 'profile-footer';
   footer.innerHTML = `
     <div class="share-card">
       <div class="share-text">
@@ -255,22 +246,22 @@ export function renderProfile(container, username = "Macedhe") {
   container.appendChild(pageContainer);
 
   // Copy button interaction
-  const copyBtn = footer.querySelector(".share-copy-btn");
-  copyBtn.addEventListener("click", async () => {
+  const copyBtn = footer.querySelector('.share-copy-btn');
+  copyBtn.addEventListener('click', async () => {
     const url = copyBtn.dataset.copy;
-    const copyText = copyBtn.querySelector(".copy-text");
+    const copyText = copyBtn.querySelector('.copy-text');
 
     try {
       await navigator.clipboard.writeText(url);
-      copyText.textContent = "COPIED";
-      copyBtn.classList.add("copied");
+      copyText.textContent = 'COPIED';
+      copyBtn.classList.add('copied');
 
       setTimeout(() => {
-        copyText.textContent = "COPY";
-        copyBtn.classList.remove("copied");
+        copyText.textContent = 'COPY';
+        copyBtn.classList.remove('copied');
       }, 2000);
     } catch (err) {
-      console.error("Failed to copy:", err);
+      console.error('Failed to copy:', err);
     }
   });
 }
