@@ -11,23 +11,15 @@ function loadGames() {
     }
   } catch {}
   _games = [
-    {
-      id: 1,
-      title: "Elden Ring",
-      cover_url: "https://images.unsplash.com/photo-1605901309584-818e25960b8f?q=80&w=1000",
-      developer: "FromSoftware",
-      status: "playing",
-      rating: 5,
-      review_snippet: "Masterpiece. Exploring the Lands Between is an unforgettable experience."
-    },
-    {
+{
       id: 2,
       title: "Cyberpunk 2077",
       cover_url: "https://images.unsplash.com/photo-1614294148960-9aa740632a87?q=80&w=1000",
       developer: "CD Projekt Red",
       status: "completed",
       rating: 4,
-      review_snippet: "Incredible world building and atmosphere. Night City feels alive."
+      review_snippet: "Incredible world building and atmosphere. Night City feels alive.",
+      review_date: "2023-10-05T10:00:00Z"
     },
     {
       id: 3,
@@ -36,7 +28,8 @@ function loadGames() {
       developer: "Team Cherry",
       status: "completed",
       rating: 5,
-      review_snippet: "The best metroidvania ever made. Perfect combat and exploration."
+      review_snippet: "The best metroidvania ever made. Perfect combat and exploration.",
+      review_date: "2023-09-01T10:00:00Z"
     },
     {
       id: 4,
@@ -45,7 +38,8 @@ function loadGames() {
       developer: "Bethesda",
       status: "dropped",
       rating: 2,
-      review_snippet: "Too many loading screens. Felt disconnected from the universe."
+      review_snippet: "Too many loading screens. Felt disconnected from the universe.",
+      review_date: "2023-07-15T10:00:00Z"
     },
     {
       id: 5,
@@ -54,7 +48,8 @@ function loadGames() {
       developer: "Team Cherry",
       status: "wishlist",
       rating: 0,
-      review_snippet: ""
+      review_snippet: "",
+      review_date: ""
     },
     {
       id: 6,
@@ -63,7 +58,8 @@ function loadGames() {
       developer: "Supergiant Games",
       status: "playing",
       rating: 4,
-      review_snippet: "Extremely addictive gameplay loop. Melinoë is a great protagonist."
+      review_snippet: "Extremely addictive gameplay loop. Melinoë is a great protagonist.",
+      review_date: "2023-08-12T10:00:00Z"
     }
   ];
   saveToStorage();

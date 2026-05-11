@@ -3,8 +3,8 @@ import { getShelfGames } from '../lib/shelf-store.js';
 import { openViewAllModal } from '../components/modal.js';
 
 const MOCK_PROFILE = {
-  username: 'heitor-exe',
-  avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Macedhe',
+  username: 'user',
+  avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Salem',
   bio: 'RPG enthusiast. Soulslike survivor. Always chasing the next platinum.',
   memberSince: '2024-03-15',
   stats: {
@@ -37,41 +37,6 @@ const MOCK_CURRENTLY_PLAYING = [
   },
 ];
 
-const MOCK_REVIEWS = [
-  {
-    game_title: 'Hollow Knight',
-    cover_url: 'https://images.unsplash.com/photo-1628155930542-3c7a64e2c833?q=80&w=600',
-    starRating: 5,
-    daysAgo: 3,
-    reviewText:
-      'The best metroidvania ever made. Team Cherry delivered something truly special — perfect combat, breathtaking art, and an atmosphere that keeps you exploring every corner. The White Palace nearly broke me, but the satisfaction was worth every death.',
-  },
-  {
-    game_title: 'Starfield',
-    cover_url: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=600',
-    starRating: 2,
-    daysAgo: 12,
-    reviewText:
-      "Too many loading screens. The universe feels empty despite the millions of planets. After 50 hours, I still felt disconnected from the universe. Shattered Space helped a bit, but it's not enough to save the experience.",
-  },
-  {
-    game_title: "Baldur's Gate 3",
-    cover_url: 'https://images.unsplash.com/photo-1534423861386-85a16f5d13fd?q=80&w=600',
-    starRating: 5,
-    daysAgo: 28,
-    reviewText:
-      'A new standard for RPGs. Larian crafted something unprecedented — every decision matters, every character feels real. The epilogue update made it even better. This is what gaming should be.',
-  },
-  {
-    game_title: 'Final Fantasy VII Rebirth',
-    cover_url: 'https://images.unsplash.com/photo-1534423861386-85a16f5d13fd?q=80&w=600',
-    starRating: 4,
-    daysAgo: 45,
-    reviewText:
-      'A worthy sequel that expands on Remake in every way. The open world sections are hit or miss, but the combat and character moments are phenomenal. Chapter 12 alone is worth the price of admission.',
-  },
-];
-
 function generateStars(rating) {
   let stars = '';
   for (let i = 0; i < 5; i++) {
@@ -84,6 +49,25 @@ function formatDate(dateString) {
   const date = new Date(dateString);
   const options = { month: 'short', year: 'numeric' };
   return date.toLocaleDateString('en-US', options);
+}
+
+function timeAgo(date) {
+  const now = new Date();
+  const diff = now - date;
+  const minutes = Math.floor(diff / 60000);
+
+  if (minutes < 1) return 'Just now';
+  if (minutes < 60) return `${minutes}m ago`;
+
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
+
+  const days = Math.floor(hours / 24);
+  if (days < 30) return `${days}d ago`;
+
+  const months = Math.floor(days / 30);
+
+  return `${months}mo ago`;
 }
 
 function createGameCard(game) {
@@ -120,7 +104,7 @@ function createReviewCard(review, index) {
     <div class="review-content-col">
       <div class="review-meta">
         <span class="review-stars">${generateStars(review.starRating)}</span>
-        <span class="review-timestamp">REVIEW • ${review.daysAgo} days ago</span>
+        <span class="review-timestamp">REVIEW • ${review.timeAgo}</span>
       </div>
       <h3 class="review-game-title">${review.game_title}</h3>
       <p class="review-text">${review.reviewText}</p>
@@ -131,7 +115,10 @@ function createReviewCard(review, index) {
   return card;
 }
 
+let _renderCount = 0;
+
 export function renderProfile(container, username = 'Macedhe') {
+  _renderCount++;
   container.innerHTML = '';
 
   const navbar = createNavbar();
@@ -147,7 +134,16 @@ export function renderProfile(container, username = 'Macedhe') {
     },
   };
   const playing = allGames.filter((g) => g.status === 'playing');
-  const reviews = MOCK_REVIEWS;
+  const reviews = allGames
+    .filter((g) => g.rating > 0 && g.review_snippet)
+    .sort((a, b) => new Date(b.review_date) - new Date(a.review_date))
+    .map((game) => ({
+      game_title: game.title || game.game_title,
+      cover_url: game.cover_url,
+      starRating: game.rating,
+      reviewText: game.review_snippet,
+      timeAgo: game.review_date ? timeAgo(new Date(game.review_date)) : 'Recently',
+    }));
 
   const pageContainer = document.createElement('div');
   pageContainer.className = 'page-container profile-page';
@@ -264,4 +260,13 @@ export function renderProfile(container, username = 'Macedhe') {
       console.error('Failed to copy:', err);
     }
   });
+}
+
+export function initProfileAutoRefresh(container) {
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'gameshelf_vanilla_games') {
+      renderProfile(container);
+    }
+  });
+  _renderCount = 1;
 }

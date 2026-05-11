@@ -1,7 +1,7 @@
 import { renderHome } from "./pages/home.js";
 import { renderSearch } from "./pages/search.js";
 import { renderShelf } from "./pages/shelf.js";
-import { renderProfile } from "./pages/profile.js";
+import { renderProfile, initProfileAutoRefresh } from "./pages/profile.js";
 import { addGameToShelf } from "./lib/shelf-store.js";
 
 window.onSave = (data) => {
@@ -20,6 +20,7 @@ function route() {
     renderShelf(app);
   } else if (path === "/profile") {
     renderProfile(app);
+    initProfileAutoRefresh(app);
   } else {
     // Default to home
     renderHome(app);

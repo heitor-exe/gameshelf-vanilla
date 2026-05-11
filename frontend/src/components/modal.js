@@ -101,14 +101,15 @@ export function openModal(game, onSave, onDelete) {
   // Save button
   overlay.querySelector('.ams-save-btn').addEventListener('click', () => {
     const statusPill = statusRow.querySelector('.ams-pill-active');
-    const data = {
-      id: game.id,
-      title: game.title,
-      cover_url: game.cover || game.cover_url || game.background_image || '',
-      status: statusPill ? statusPill.dataset.value : 'playing',
-      rating: parseInt(starsContainer.dataset.rating) || 0,
-      review_snippet: overlay.querySelector('.ams-textarea').value.trim(),
-    };
+      const data = {
+        id: game.id,
+        title: game.title,
+        cover_url: game.cover || game.cover_url || game.background_image || '',
+        status: statusPill ? statusPill.dataset.value : 'playing',
+        rating: parseInt(starsContainer.dataset.rating) || 0,
+        review_snippet: overlay.querySelector('.ams-textarea').value.trim(),
+        review_date: new Date().toISOString(),
+      };
     console.log('[modal] saved:', data);
     closeModal();
     if (typeof onSave === 'function') {
