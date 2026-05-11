@@ -16,11 +16,6 @@ const MOCK_PROFILE = {
 
 const MOCK_CURRENTLY_PLAYING = [
   {
-    game_title: 'Elden Ring',
-    cover_url: 'https://images.unsplash.com/photo-1605901309584-818e25960b8f?q=80&w=400',
-    developer: 'FromSoftware',
-  },
-  {
     game_title: 'Cyberpunk 2077',
     cover_url: 'https://images.unsplash.com/photo-1614294148960-9aa740632a87?q=80&w=400',
     developer: 'CD Projekt Red',

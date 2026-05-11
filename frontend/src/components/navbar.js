@@ -25,7 +25,7 @@ export function createNavbar() {
           <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
         </svg>
       </button>
-      <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Macedhe" alt="User Avatar" class="avatar">
+      <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Salem" alt="User Avatar" class="avatar">
     </div>
   `;
 
