@@ -1,6 +1,7 @@
 import { createNavbar } from '../components/navbar.js';
 import { openModal } from '../components/modal.js';
 import { getShelfGames, addGameToShelf, removeGameFromShelf } from '../lib/shelf-store.js';
+import '../styles/pages/shelf.css';
 
 /**
  * Página da Shelf (Prateleira)

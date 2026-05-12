@@ -1,6 +1,7 @@
 import { createNavbar } from '../components/navbar.js';
 import { getShelfGames } from '../lib/shelf-store.js';
 import { openModal, openViewAllModal } from '../components/modal.js';
+import '../styles/pages/profile.css';
 
 const MOCK_PROFILE = {
   username: 'user',

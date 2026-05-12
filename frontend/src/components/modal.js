@@ -1,3 +1,5 @@
+import '../styles/components/modal.css';
+
 let overlay = null;
 
 export function openModal(game, onSave, optionsOrOnDelete) {

@@ -12,6 +12,7 @@
 
 import { createNavbar } from "../components/navbar.js";
 import { openModal } from "../components/modal.js";
+import "../styles/pages/search.css";
 
 // ---------------------------------------------------------------------------
 // Dados mock — serão substituídos pela RAWG API quando a integração estiver pronta.

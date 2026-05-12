@@ -1,4 +1,5 @@
 import { createNavbar } from '../components/navbar.js';
+import '../styles/pages/home.css';
 
 const MOCK_FEED = [
   {

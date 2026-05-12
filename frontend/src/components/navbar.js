@@ -1,3 +1,5 @@
+import '../styles/components/navbar.css';
+
 export function createNavbar() {
   const navContainer = document.createElement('nav');
   navContainer.className = 'navbar';

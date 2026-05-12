@@ -1,0 +1,145 @@
+.main-column {
+    flex: 0 0 65%;
+    max-width: 65%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.sidebar-column {
+    flex: 0 0 30%;
+    max-width: 30%;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+/* Feed Cards */
+.feed-card {
+    display: flex;
+    flex-direction: column;
+}
+
+.feed-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+}
+
+.feed-header .avatar {
+    width: 40px;
+    height: 40px;
+}
+
+.feed-user-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.feed-username {
+    font-weight: 700;
+    font-size: 0.95rem;
+}
+
+.feed-action {
+    color: var(--color-on-surface-variant);
+    font-size: 0.85rem;
+}
+
+.feed-timestamp {
+    color: var(--color-outline);
+    font-size: 0.8rem;
+    margin-left: auto;
+}
+
+.feed-card.layout-reviewed .cover-art {
+    width: 100%;
+    aspect-ratio: 16/9;
+    object-fit: cover;
+}
+
+.feed-card.layout-added {
+    flex-direction: row;
+    align-items: flex-start;
+}
+
+.feed-card.layout-added .cover-art {
+    width: 120px;
+    height: 160px;
+    object-fit: cover;
+    border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+}
+
+.feed-card.layout-added .feed-content-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.feed-body {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.game-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.game-genres {
+    font-size: 0.8rem;
+    color: var(--color-primary-dim);
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.review-text {
+    color: var(--color-on-surface-variant);
+    line-height: 1.5;
+    font-size: 0.95rem;
+    margin-top: 0.5rem;
+}
+
+/* Trending Widget */
+.widget {
+    padding: 1.5rem;
+}
+
+.trending-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--color-surface-bright);
+}
+
+.trending-item:last-child {
+    border-bottom: none;
+}
+
+.trending-hashtag {
+    color: var(--color-primary);
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.trending-title {
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+.trending-count {
+    color: var(--color-outline);
+    font-size: 0.8rem;
+}
+
+/* Stats Widget */
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}

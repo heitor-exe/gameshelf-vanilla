@@ -73,3 +73,92 @@ html, body {
   height: auto;
   border-radius: var(--radius-lg) var(--radius-lg) 0 0;
 }
+
+/* Shared page layout */
+.page-container {
+    padding-top: 80px;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    gap: 2rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    padding-bottom: 3rem;
+}
+
+.section-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--color-on-surface);
+}
+
+.review-stars {
+    color: #ffc107;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+}
+
+.stat-box {
+    background-color: var(--color-surface-high);
+    border-radius: var(--radius-md);
+    padding: 1.5rem 1rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--color-primary);
+    line-height: 1;
+}
+
+.stat-label {
+    font-size: 0.85rem;
+    color: var(--color-on-surface-variant);
+    font-weight: 500;
+}
+
+.game-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.game-info-title {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--color-on-surface);
+    line-height: 1.2;
+}
+
+.game-info-meta {
+    color: var(--color-on-surface-variant);
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.btn-ghost {
+    background: transparent;
+    border: 1px solid var(--color-outline-variant);
+    color: var(--color-on-surface-variant);
+    font-family: var(--font-family);
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-ghost:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.view-all-btn {
+    letter-spacing: 0.5px;
+}

@@ -1,0 +1,161 @@
+.shelf-header {
+    margin-bottom: 2rem;
+}
+
+.shelf-hero-title {
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--color-on-surface);
+    margin-bottom: 0.25rem;
+    text-align: left;
+}
+
+.shelf-hero-subtitle {
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--color-outline);
+}
+
+.shelf-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+}
+
+.shelf-tabs {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--color-surface-bright);
+}
+
+.shelf-tab {
+    background: none;
+    border: none;
+    color: var(--color-on-surface-variant);
+    font-family: var(--font-family);
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.75rem 0;
+    cursor: pointer;
+    position: relative;
+    transition: color 0.2s;
+}
+
+.shelf-tab:hover {
+    color: var(--color-on-surface);
+}
+
+.shelf-tab.active {
+    color: var(--color-on-surface);
+}
+
+.shelf-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--color-primary);
+}
+
+.shelf-games-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+}
+
+@media (max-width: 768px) {
+    .shelf-games-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+}
+
+.shelf-game-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.shelf-game-card:hover {
+    transform: translateY(-4px);
+}
+
+.shelf-cover-wrapper {
+    position: relative;
+    background-color: var(--color-surface-container);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    aspect-ratio: 3/4;
+}
+
+.shelf-cover-wrapper .cover-art {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.shelf-rating-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+    padding: 1.5rem 0.75rem 0.5rem;
+}
+
+.shelf-game-title {
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--color-on-surface);
+    line-height: 1.2;
+}
+
+.shelf-review-snippet {
+    font-size: 0.85rem;
+    color: var(--color-on-surface-variant);
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.floating-add-btn {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background-color: var(--color-primary);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.2rem;
+    font-weight: 300;
+    line-height: 0;
+    padding-bottom: 4px;
+    box-shadow: 0 4px 12px rgba(207, 150, 255, 0.4);
+    cursor: pointer;
+    transition:
+        transform 0.2s,
+        background-color 0.2s;
+    text-decoration: none;
+    z-index: 100;
+}
+
+.floating-add-btn:hover {
+    transform: scale(1.05);
+    background-color: var(--color-primary-dim);
+}
