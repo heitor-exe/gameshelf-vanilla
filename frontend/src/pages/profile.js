@@ -1,6 +1,6 @@
 import { createNavbar } from '../components/navbar.js';
 import { getShelfGames } from '../lib/shelf-store.js';
-import { openViewAllModal } from '../components/modal.js';
+import { openModal, openViewAllModal } from '../components/modal.js';
 
 const MOCK_PROFILE = {
   username: 'user',
@@ -85,7 +85,7 @@ function createGameCard(game) {
   return card;
 }
 
-function createReviewCard(review, index) {
+function createReviewCard(review, index, game) {
   const card = document.createElement('article');
   const isOdd = index % 2 === 1;
   const altLayout = isOdd ? 'layout-cover-left' : 'layout-cover-right';
@@ -106,6 +106,14 @@ function createReviewCard(review, index) {
       <button class="btn-ghost">READ FULL REVIEW</button>
     </div>
   `;
+
+  if (game) {
+    const readMoreBtn = card.querySelector('.btn-ghost');
+    readMoreBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openModal(game, null, { readOnly: true });
+    });
+  }
 
   return card;
 }
@@ -129,16 +137,16 @@ export function renderProfile(container, username = 'Macedhe') {
     },
   };
   const playing = allGames.filter((g) => g.status === 'playing');
-  const reviews = allGames
+  const reviewGames = allGames
     .filter((g) => g.rating > 0 && g.review_snippet)
-    .sort((a, b) => new Date(b.review_date) - new Date(a.review_date))
-    .map((game) => ({
-      game_title: game.title || game.game_title,
-      cover_url: game.cover_url,
-      starRating: game.rating,
-      reviewText: game.review_snippet,
-      timeAgo: game.review_date ? timeAgo(new Date(game.review_date)) : 'Recently',
-    }));
+    .sort((a, b) => new Date(b.review_date) - new Date(a.review_date));
+  const reviews = reviewGames.map((game) => ({
+    game_title: game.title || game.game_title,
+    cover_url: game.cover_url,
+    starRating: game.rating,
+    reviewText: game.review_snippet,
+    timeAgo: game.review_date ? timeAgo(new Date(game.review_date)) : 'Recently',
+  }));
 
   const pageContainer = document.createElement('div');
   pageContainer.className = 'page-container profile-page';
@@ -204,14 +212,17 @@ export function renderProfile(container, username = 'Macedhe') {
   // Recently Reviewed Section
   const reviewsSection = document.createElement('section');
   reviewsSection.className = 'profile-section reviews-section';
-  reviewsSection.innerHTML = `
-    <div class="section-header">
-      <h2 class="section-title">Recently Reviewed</h2>
-    </div>
-    <div class="reviews-list">
-      ${reviews.map((review, i) => createReviewCard(review, i).outerHTML).join('')}
-    </div>
-  `;
+  const reviewsSectionHeader = document.createElement('div');
+  reviewsSectionHeader.className = 'section-header';
+  reviewsSectionHeader.innerHTML = `<h2 class="section-title">Recently Reviewed</h2>`;
+  reviewsSection.appendChild(reviewsSectionHeader);
+
+  const reviewsList = document.createElement('div');
+  reviewsList.className = 'reviews-list';
+  reviews.forEach((review, i) => {
+    reviewsList.appendChild(createReviewCard(review, i, reviewGames[i]));
+  });
+  reviewsSection.appendChild(reviewsList);
   pageContainer.appendChild(reviewsSection);
 
   // Footer / Share Section

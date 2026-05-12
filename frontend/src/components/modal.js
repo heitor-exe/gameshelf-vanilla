@@ -1,11 +1,53 @@
 let overlay = null;
 
-export function openModal(game, onSave, onDelete) {
+export function openModal(game, onSave, optionsOrOnDelete) {
   if (overlay) document.body.removeChild(overlay);
 
-  const isEditMode = typeof onDelete === 'function';
+  const isEditMode = typeof optionsOrOnDelete === 'function';
+  const options = (!isEditMode && typeof optionsOrOnDelete === 'object') ? optionsOrOnDelete : {};
+  const isReadOnly = options.readOnly === true;
+  const onDelete = isEditMode ? optionsOrOnDelete : undefined;
 
   const genresHTML = game.genres ? game.genres.map((g) => `<span class="ams-genre-pill">${g}</span>`).join('') : '';
+  const currentStatus = game.status || 'playing';
+  const currentRating = game.rating || 0;
+  const reviewText = game.review || game.review_snippet || '';
+
+  const statusLabels = { playing: 'Playing', completed: 'Completed', dropped: 'Dropped', wishlist: 'Wishlist' };
+
+  const statusPillsHTML = isReadOnly
+    ? `<span class="ams-pill ams-pill-active ams-pill-readonly" data-value="${currentStatus}">${statusLabels[currentStatus] || currentStatus}</span>`
+    : Object.entries(statusLabels)
+        .map(([val, label]) =>
+          `<button class="ams-pill${val === currentStatus ? ' ams-pill-active' : ''}" data-value="${val}">${label}</button>`
+        )
+        .join('');
+
+  const starsHTML = isReadOnly
+    ? `<div class="ams-stars-readonly">${'★'.repeat(currentRating)}${'☆'.repeat(5 - currentRating)}</div>`
+    : `<div class="ams-stars" data-rating="${currentRating}">${[1, 2, 3, 4, 5]
+        .map((i) => {
+          const filled = i <= currentRating;
+          return `<button class="ams-star${filled ? ' is-filled' : ''}" data-value="${i}" aria-label="${i} star${i > 1 ? 's' : ''}">${filled ? '&#9733;' : '&#9734;'}</button>`;
+        })
+        .join('')}</div>`;
+
+  const reviewHTML = isReadOnly
+    ? `<div class="ams-section">
+        <label class="ams-section-label">REVIEW</label>
+        <div class="ams-review-display">${reviewText || 'No review written for this game.'}</div>
+      </div>`
+    : `<div class="ams-section">
+        <label class="ams-section-label">REVIEW (OPTIONAL)</label>
+        <textarea class="ams-textarea" placeholder="Write your review..." rows="4">${reviewText}</textarea>
+      </div>`;
+
+  const footerHTML = isReadOnly
+    ? `<div class="ams-footer"><button class="ams-close-btn">CLOSE</button></div>`
+    : `<div class="ams-footer">
+        ${isEditMode ? `<button class="ams-delete-btn">REMOVE FROM SHELF</button>` : ''}
+        <button class="ams-save-btn">${isEditMode ? 'UPDATE' : 'SAVE TO SHELF'}</button>
+      </div>`;
 
   overlay = document.createElement('div');
   overlay.className = 'ams-overlay';
@@ -22,46 +64,49 @@ export function openModal(game, onSave, onDelete) {
       <div class="ams-body">
         <div class="ams-section">
           <label class="ams-section-label">COLLECTION STATUS</label>
-          <div class="ams-status-row" data-status="${game.status || ''}">
-            <button class="ams-pill" data-value="playing">Playing</button>
-            <button class="ams-pill" data-value="completed">Completed</button>
-            <button class="ams-pill" data-value="dropped">Dropped</button>
-            <button class="ams-pill" data-value="wishlist">Wishlist</button>
+          <div class="ams-status-row" data-status="${currentStatus}">
+            ${statusPillsHTML}
           </div>
         </div>
 
         <div class="ams-section">
           <label class="ams-section-label">YOUR RATING</label>
-          <div class="ams-stars" data-rating="${game.rating || 0}">
-            ${[1, 2, 3, 4, 5]
-              .map((i) => {
-                const filled = i <= (game.rating || 0);
-                return `<button class="ams-star${filled ? ' is-filled' : ''}" data-value="${i}" aria-label="${i} star${i > 1 ? 's' : ''}">${filled ? '&#9733;' : '&#9734;'}</button>`;
-              })
-              .join('')}
-          </div>
+          ${starsHTML}
         </div>
 
-        <div class="ams-section">
-          <label class="ams-section-label">REVIEW (OPTIONAL)</label>
-          <textarea class="ams-textarea" placeholder="Write your review..." rows="4">${game.review || game.review_snippet || ''}</textarea>
-        </div>
+        ${reviewHTML}
       </div>
 
-      <div class="ams-footer">
-        ${isEditMode ? `<button class="ams-delete-btn">REMOVE FROM SHELF</button>` : ''}
-        <button class="ams-save-btn">${isEditMode ? 'UPDATE' : 'SAVE TO SHELF'}</button>
-      </div>
+      ${footerHTML}
     </div>
   `;
 
   document.body.appendChild(overlay);
   document.body.style.overflow = 'hidden';
 
+  // Close button (header)
+  overlay.querySelector('.ams-close').addEventListener('click', closeModal);
+
+  // Overlay backdrop click
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) closeModal();
+  });
+
+  // Escape key
+  const onKeyDown = (e) => {
+    if (e.key === 'Escape') closeModal();
+  };
+  overlay._onKeyDown = onKeyDown;
+  document.addEventListener('keydown', onKeyDown);
+
+  if (isReadOnly) {
+    overlay.querySelector('.ams-close-btn').addEventListener('click', closeModal);
+    return;
+  }
+
   // Set active status pill
   const statusRow = overlay.querySelector('.ams-status-row');
-  const savedStatus = game.status || 'playing';
-  const initialPill = statusRow.querySelector(`[data-value="${savedStatus}"]`);
+  const initialPill = statusRow.querySelector(`[data-value="${currentStatus}"]`);
   if (initialPill) initialPill.classList.add('ams-pill-active');
 
   // Status pill clicks
@@ -76,9 +121,7 @@ export function openModal(game, onSave, onDelete) {
   starsContainer.addEventListener('click', (e) => {
     if (!e.target.classList.contains('ams-star')) return;
     const rating = parseInt(e.target.dataset.value);
-    // Update the stored rating
     starsContainer.dataset.rating = rating;
-    // Update each star's glyph and filled class
     starsContainer.querySelectorAll('.ams-star').forEach((s, idx) => {
       if (idx < rating) {
         s.innerHTML = '&#9733;';
@@ -88,14 +131,6 @@ export function openModal(game, onSave, onDelete) {
         s.classList.remove('is-filled');
       }
     });
-  });
-
-  // Close button
-  overlay.querySelector('.ams-close').addEventListener('click', closeModal);
-
-  // Overlay backdrop click
-  overlay.addEventListener('click', (e) => {
-    if (e.target === overlay) closeModal();
   });
 
   // Save button
@@ -129,13 +164,6 @@ export function openModal(game, onSave, onDelete) {
       }
     });
   }
-
-  // Escape key
-  const onKeyDown = (e) => {
-    if (e.key === 'Escape') closeModal();
-  };
-  overlay._onKeyDown = onKeyDown;
-  document.addEventListener('keydown', onKeyDown);
 }
 
 export function closeModal() {

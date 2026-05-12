@@ -1761,3 +1761,70 @@
         padding: 1rem 1.25rem 1.5rem;
     }
 }
+
+/* ------------------------
+   Read-Only Review Modal
+   ------------------------ */
+
+.ams-pill-readonly {
+    cursor: default;
+    pointer-events: none;
+    opacity: 0.85;
+}
+
+.ams-pill-readonly:hover {
+    background: linear-gradient(135deg, var(--color-primary-dim), var(--color-primary));
+    color: #000;
+}
+
+.ams-stars-readonly {
+    font-size: 1.75rem;
+    color: var(--color-secondary);
+    letter-spacing: 0.15em;
+    line-height: 1;
+    padding: 0.125rem 0;
+}
+
+.ams-review-display {
+    font-size: 1rem;
+    line-height: 1.85;
+    color: var(--color-on-surface);
+    padding: 0.75rem 0 0.5rem;
+    white-space: pre-wrap;
+    position: relative;
+}
+
+.ams-review-display::before {
+    content: '\201C';
+    font-size: 3.5rem;
+    color: var(--color-primary);
+    opacity: 0.2;
+    position: absolute;
+    top: 0.15rem;
+    left: -0.35rem;
+    font-family: Georgia, serif;
+    line-height: 1;
+    pointer-events: none;
+}
+
+.ams-close-btn {
+    width: 100%;
+    padding: 0.85rem;
+    background: transparent;
+    color: var(--color-on-surface-variant);
+    border: 2px solid var(--color-outline);
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    font-family: var(--font-family);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    transition: all 0.2s;
+}
+
+.ams-close-btn:hover {
+    background: var(--color-surface-bright);
+    color: var(--color-on-surface);
+    border-color: var(--color-on-surface-variant);
+}
