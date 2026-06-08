@@ -129,8 +129,13 @@ export function renderProfile(container, username = 'Macedhe') {
   container.appendChild(navbar);
 
   const allGames = getShelfGames();
+  const user = window.currentUser || MOCK_PROFILE;
+  
   const profile = {
-    ...MOCK_PROFILE,
+    username: user.username,
+    avatar: user.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.username || 'Salem'}`,
+    bio: user.bio || 'RPG enthusiast. Soulslike survivor. Always chasing the next platinum.',
+    memberSince: user.created_at || '2026-05-27',
     stats: {
       total: allGames.length,
       completed: allGames.filter((g) => g.status === 'completed').length,
