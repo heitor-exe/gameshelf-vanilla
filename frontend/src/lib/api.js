@@ -85,3 +85,52 @@ export const authAPI = {
     });
   },
 };
+
+// ---------------------------------------------------------------
+// Shelf Endpoints
+// ---------------------------------------------------------------
+
+export const shelfAPI = {
+  /**
+   * Fetches the user's shelf and profile.
+   * @param {string} username
+   */
+  getShelf(username) {
+    return request(`/shelf/${username}`, {
+      method: 'GET',
+    });
+  },
+
+  /**
+   * Adds a new game to the shelf.
+   * @param {Object} gameData { rawg_game_id, game_title, game_cover_url, game_genres, status, rating, review }
+   */
+  addGame(gameData) {
+    return request('/shelf', {
+      method: 'POST',
+      body: gameData,
+    });
+  },
+
+  /**
+   * Updates an existing game in the shelf.
+   * @param {string} entryId
+   * @param {Object} updates { status, rating, review }
+   */
+  updateGame(entryId, updates) {
+    return request(`/shelf/${entryId}`, {
+      method: 'PATCH',
+      body: updates,
+    });
+  },
+
+  /**
+   * Deletes a game from the shelf.
+   * @param {string} entryId
+   */
+  deleteGame(entryId) {
+    return request(`/shelf/${entryId}`, {
+      method: 'DELETE',
+    });
+  },
+};

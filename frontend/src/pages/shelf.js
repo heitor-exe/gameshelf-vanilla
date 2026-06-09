@@ -157,14 +157,14 @@ export function renderShelf(container) {
         createShelfGameCard(
           game,
           // Função de callback para atualizar o jogo no armazenamento.
-          (updatedData) => {
-            addGameToShelf(updatedData);
+          async (updatedData) => {
+            await addGameToShelf(updatedData);
             updateStats();
             renderGrid(currentTab);
           },
           // Função de callback para remover o jogo do armazenamento.
-          (gameId) => {
-            removeGameFromShelf(gameId);
+          async (gameId) => {
+            await removeGameFromShelf(gameId);
             updateStats();
             renderGrid(currentTab);
           },

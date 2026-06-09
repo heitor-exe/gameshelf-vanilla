@@ -4,14 +4,14 @@ import { renderShelf } from "./pages/shelf.js";
 import { renderProfile, initProfileAutoRefresh } from "./pages/profile.js";
 import { renderLogin } from "./pages/login.js";
 import { renderRegister } from "./pages/register.js";
-import { addGameToShelf } from "./lib/shelf-store.js";
+import { addGameToShelf, loadGames } from "./lib/shelf-store.js";
 import { authAPI } from "./lib/api.js";
 
 // Global auth state: undefined = checking, null = guest, object = logged-in user
 window.currentUser = undefined;
 
-window.onSave = (data) => {
-  addGameToShelf(data);
+window.onSave = async (data) => {
+  await addGameToShelf(data);
   console.log("Game saved to shelf:", data);
 };
 
@@ -38,6 +38,11 @@ async function route() {
   }
 
   const user = window.currentUser;
+
+  if (user && user.username) {
+    // Load shelf data for the authenticated user before routing
+    await loadGames(user.username);
+  }
 
   // 2. Routing logic based on auth state
   if (!user) {
