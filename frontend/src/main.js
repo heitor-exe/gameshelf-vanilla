@@ -9,6 +9,7 @@ import { authAPI } from "./lib/api.js";
 
 // Global auth state: undefined = checking, null = guest, object = logged-in user
 window.currentUser = undefined;
+let isShelfLoaded = false;
 
 window.onSave = async (data) => {
   await addGameToShelf(data);
@@ -41,7 +42,14 @@ async function route() {
 
   if (user && user.username) {
     // Load shelf data for the authenticated user before routing
-    await loadGames(user.username);
+    // We only await it on the first load so we don't block navigation
+    if (!isShelfLoaded) {
+      await loadGames(user.username);
+      isShelfLoaded = true;
+    } else {
+      // Refresh in the background without blocking the UI
+      loadGames(user.username);
+    }
   }
 
   // 2. Routing logic based on auth state
