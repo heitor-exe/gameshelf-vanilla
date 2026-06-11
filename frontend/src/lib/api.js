@@ -134,3 +134,34 @@ export const shelfAPI = {
     });
   },
 };
+
+// ---------------------------------------------------------------
+// Feed Endpoints
+// ---------------------------------------------------------------
+
+export const feedAPI = {
+  /**
+   * Fetches the global feed of recent shelf activities.
+   */
+  getGlobalFeed() {
+    return request('/feed', {
+      method: 'GET',
+    });
+  },
+};
+
+// ---------------------------------------------------------------
+// Profile Endpoints
+// ---------------------------------------------------------------
+
+export const profileAPI = {
+  /**
+   * Fetches a specific user's profile and their shelf statistics.
+   * @param {string} username
+   */
+  getProfile(username) {
+    return request(`/profile/${username}`, {
+      method: 'GET',
+    });
+  },
+};

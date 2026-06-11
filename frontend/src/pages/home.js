@@ -1,54 +1,33 @@
 import { createNavbar } from '../components/navbar.js';
+import { feedAPI } from '../lib/api.js';
+import { getShelfGames } from '../lib/shelf-store.js';
 import '../styles/pages/home.css';
-
-const MOCK_FEED = [
-  {
-    type: "reviewed",
-    username: "Alex.Hunter",
-    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Alex",
-    game_title: "Cyberpunk: Neon Nights",
-    game_cover: "https://images.unsplash.com/photo-1614294148960-9aa740632a87?q=80&w=1000",
-    game_genres: "RPG • Cyberpunk",
-    rating: 4,
-    review_text: "Incredible atmosphere and lighting. The side quests really flesh out the dystopian feel. Exploring the neon-lit alleyways is an absolute visual treat.",
-    timestamp: "2 hours ago"
-  },
-  {
-    type: "added",
-    username: "SarahPlayz",
-    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah",
-    game_title: "Pixel Woods",
-    game_cover: "https://images.unsplash.com/photo-1628155930542-3c7a64e2c833?q=80&w=1000",
-    game_genres: "Platformer • Indie",
-    timestamp: "5 hours ago"
-  },
-  {
-    type: "reviewed",
-    username: "RetroGamer88",
-    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Retro",
-    game_title: "Velocity Overdrive 4",
-    game_cover: "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1000",
-    game_genres: "Racing • Arcade",
-    rating: 5,
-    review_text: "Best sense of speed in any arcade racer I've played this year. The synthwave soundtrack slaps insanely hard.",
-    timestamp: "1 day ago"
-  },
-  {
-    type: "added",
-    username: "NoobMaster69",
-    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Noob",
-    game_title: "Elden Magic",
-    game_cover: "/assets/elden_magic.png",
-    game_genres: "RPG • Fantasy",
-    timestamp: "2 days ago"
-  }
-];
 
 const TRENDING_TOPICS = [
   { hashtag: "#IndieShowcase", title: "Best Hidden Gems of 2026", count: "12K posts" },
   { hashtag: "#Speedrun", title: "Velocity Overdrive Any% WR", count: "8.5K posts" },
   { hashtag: "#BossFight", title: "Defeating the Crimson Dragon", count: "5K posts" }
 ];
+
+function timeAgo(dateString) {
+  if (!dateString) return 'Just now';
+  const date = new Date(dateString);
+  const now = new Date();
+  const diff = now - date;
+  const minutes = Math.floor(diff / 60000);
+
+  if (minutes < 1) return 'Just now';
+  if (minutes < 60) return `${minutes}m ago`;
+
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
+
+  const days = Math.floor(hours / 24);
+  if (days < 30) return `${days}d ago`;
+
+  const months = Math.floor(days / 30);
+  return `${months}mo ago`;
+}
 
 function generateStars(rating) {
   if (!rating) return "";
@@ -61,31 +40,50 @@ function generateStars(rating) {
 
 function createFeedCard(item) {
   const card = document.createElement("article");
-  card.className = `card feed-card layout-${item.type}`;
   
+  // Se tem texto de review, nós consideramos "reviewed", senão é um "added" ou "playing"
+  const type = item.review && item.review.trim() !== '' ? 'reviewed' : 'added';
+  card.className = `card feed-card layout-${type}`;
+  
+  const username = item.profiles?.username || 'Unknown';
+  const avatar = item.profiles?.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${username}`;
+  
+  let actionText = 'added to their shelf';
+  if (type === 'reviewed') {
+    actionText = 'wrote a review for';
+  } else if (item.status === 'playing') {
+    actionText = 'started playing';
+  } else if (item.status === 'completed') {
+    actionText = 'completed';
+  } else if (item.status === 'dropped') {
+    actionText = 'dropped';
+  }
+  
+  const genresText = Array.isArray(item.game_genres) ? item.game_genres.slice(0, 3).join(' • ') : '';
+
   const headerHtml = `
     <div class="feed-header">
-      <img src="${item.avatar}" alt="${item.username}" class="avatar">
+      <img src="${avatar}" alt="${username}" class="avatar">
       <div class="feed-user-info">
-        <span class="feed-username">${item.username}</span>
-        <span class="feed-action">${item.type === 'reviewed' ? 'wrote a review for' : 'added to their shelf'}</span>
+        <span class="feed-username">${username}</span>
+        <span class="feed-action">${actionText}</span>
       </div>
-      <span class="feed-timestamp">${item.timestamp}</span>
+      <span class="feed-timestamp">${timeAgo(item.created_at)}</span>
     </div>
   `;
 
-  const coverHtml = `<img src="${item.game_cover}" alt="${item.game_title}" class="cover-art">`;
+  const coverHtml = `<img src="${item.game_cover_url || ''}" alt="${item.game_title}" class="cover-art">`;
   
   const bodyHtml = `
     <div class="feed-body">
-      <span class="game-genres">${item.game_genres}</span>
+      ${genresText ? `<span class="game-genres">${genresText}</span>` : ''}
       <h3 class="game-title">${item.game_title}</h3>
-      ${generateStars(item.rating)}
-      ${item.review_text ? `<p class="review-text">${item.review_text}</p>` : ''}
+      ${item.rating ? generateStars(item.rating) : ''}
+      ${type === 'reviewed' ? `<p class="review-text">${item.review}</p>` : ''}
     </div>
   `;
 
-  if (item.type === 'reviewed') {
+  if (type === 'reviewed') {
     card.innerHTML = `
       ${headerHtml}
       ${coverHtml}
@@ -104,7 +102,7 @@ function createFeedCard(item) {
   return card;
 }
 
-export function renderHome(container) {
+export async function renderHome(container) {
   container.innerHTML = "";
   
   // Add Navbar
@@ -124,9 +122,16 @@ export function renderHome(container) {
   feedTitle.textContent = "Recent Activity";
   mainColumn.appendChild(feedTitle);
 
-  MOCK_FEED.forEach(item => {
-    mainColumn.appendChild(createFeedCard(item));
-  });
+  // Carrega o feed da API do backend
+  const loadingText = document.createElement("div");
+  loadingText.className = "auth-spinner"; // Reaproveitando o spinner
+  loadingText.style.margin = "2rem auto";
+  
+  const loadingWrapper = document.createElement("div");
+  loadingWrapper.style.textAlign = "center";
+  loadingWrapper.style.padding = "2rem";
+  loadingWrapper.appendChild(loadingText);
+  mainColumn.appendChild(loadingWrapper);
 
   // Right column: Sidebar (Trending & Stats)
   const sidebarColumn = document.createElement("aside");
@@ -149,6 +154,11 @@ export function renderHome(container) {
   `;
   sidebarColumn.appendChild(trendingWidget);
 
+  // Atualiza as estatísticas com os dados locais do usuário ativo
+  const allGames = getShelfGames();
+  const totalOwned = allGames.length;
+  const inProgress = allGames.filter(g => g.status === 'playing').length;
+
   // Stats Widget
   const statsWidget = document.createElement("div");
   statsWidget.className = "card widget";
@@ -156,11 +166,11 @@ export function renderHome(container) {
     <h2 class="section-title">Your Shelf</h2>
     <div class="stats-grid">
       <div class="stat-box">
-        <span class="stat-value">128</span>
+        <span class="stat-value">${totalOwned}</span>
         <span class="stat-label">Games Owned</span>
       </div>
       <div class="stat-box">
-        <span class="stat-value">3</span>
+        <span class="stat-value">${inProgress}</span>
         <span class="stat-label">In Progress</span>
       </div>
     </div>
@@ -170,5 +180,34 @@ export function renderHome(container) {
   pageContainer.appendChild(mainColumn);
   pageContainer.appendChild(sidebarColumn);
   
+  // MONTA A PÁGINA ANTES DO AWAIT
   container.appendChild(pageContainer);
+
+  try {
+    const feedData = await feedAPI.getGlobalFeed();
+    mainColumn.removeChild(loadingWrapper);
+    
+    if (!feedData || feedData.length === 0) {
+      const emptyText = document.createElement("p");
+      emptyText.textContent = "No recent activity found.";
+      emptyText.style.color = "var(--color-on-surface-variant)";
+      emptyText.style.textAlign = "center";
+      emptyText.style.padding = "2rem";
+      mainColumn.appendChild(emptyText);
+    } else {
+      feedData.forEach(item => {
+        mainColumn.appendChild(createFeedCard(item));
+      });
+    }
+  } catch (error) {
+    if (mainColumn.contains(loadingWrapper)) {
+      mainColumn.removeChild(loadingWrapper);
+    }
+    const errorText = document.createElement("p");
+    errorText.textContent = "Error loading feed. Please try again later.";
+    errorText.style.color = "var(--color-error)";
+    errorText.style.textAlign = "center";
+    errorText.style.padding = "2rem";
+    mainColumn.appendChild(errorText);
+  }
 }
