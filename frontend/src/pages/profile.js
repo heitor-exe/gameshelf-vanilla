@@ -3,6 +3,7 @@ import { getShelfGames } from '../lib/shelf-store.js';
 import { openModal, openViewAllModal } from '../components/modal.js';
 import { profileAPI } from '../lib/api.js';
 import '../styles/pages/profile.css';
+import '../styles/pages/creative-popup.css';
 
 function generateStars(rating) {
   if (!rating) return '';
@@ -39,6 +40,61 @@ function timeAgo(date) {
   return `${months}mo ago`;
 }
 
+function openCreativePopup(game) {
+  const overlay = document.createElement('div');
+  overlay.className = 'creative-popup-overlay';
+  
+  const title = game.title || game.game_title || 'Unknown Title';
+  const developer = Array.isArray(game.game_genres) ? game.game_genres.slice(0, 2).join(', ') : 'Unknown Studio';
+  const cover = game.cover_url || game.game_cover_url || '';
+  const rating = Number(game.rating) || 0;
+  const stars = rating > 0 ? `${'★'.repeat(rating)}${'☆'.repeat(5 - rating)}` : 'No rating yet';
+  const review = game.review || game.review_snippet || 'No thoughts recorded for this game yet. Still exploring!';
+  const timePlayed = game.created_at ? timeAgo(new Date(game.created_at)) : 'Recently added';
+
+  overlay.innerHTML = `
+    <div class="creative-popup-card">
+      <div class="creative-popup-cover">
+        <img src="${cover}" alt="${title}">
+      </div>
+      <div class="creative-popup-content">
+        <div class="creative-popup-header">
+          <span class="creative-popup-dev">${developer}</span>
+          <h2 class="creative-popup-title">${title}</h2>
+          <div class="creative-popup-stars">${stars}</div>
+        </div>
+        <div class="creative-popup-body">
+          <div class="creative-popup-meta-item">
+            <span class="creative-popup-meta-label">Time Playing</span>
+            <span class="creative-popup-meta-value">${timePlayed}</span>
+          </div>
+          <div class="creative-popup-review">"${review}"</div>
+        </div>
+        <div class="creative-popup-footer">
+          <button class="creative-popup-close">CLOSE</button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+  document.body.style.overflow = 'hidden';
+
+  const closeBtn = overlay.querySelector('.creative-popup-close');
+  
+  const closePopup = () => {
+    overlay.remove();
+    document.body.style.overflow = '';
+    document.removeEventListener('keydown', onEsc);
+  };
+
+  const onEsc = (e) => { if (e.key === 'Escape') closePopup(); };
+
+  closeBtn.addEventListener('click', closePopup);
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) closePopup(); });
+  document.addEventListener('keydown', onEsc);
+}
+
 function createGameCard(game) {
   const card = document.createElement('article');
   card.className = 'current-game-card';
@@ -55,6 +111,10 @@ function createGameCard(game) {
       <span class="current-game-dev">${developer}</span>
     </div>
   `;
+
+  card.addEventListener('click', () => {
+    openCreativePopup(game);
+  });
 
   return card;
 }
@@ -192,11 +252,14 @@ export async function renderProfile(container, username = window.currentUser?.us
           <h2 class="section-title">Currently Playing</h2>
           <button class="btn-ghost view-all-btn">VIEW ALL</button>
         </div>
-        <div class="playing-scroll-row">
-          ${recentPlaying.map((game) => createGameCard(game).outerHTML).join('')}
-        </div>
+        <div class="playing-scroll-row"></div>
       `;
       pageContainer.appendChild(playingSection);
+
+      const scrollRow = playingSection.querySelector('.playing-scroll-row');
+      recentPlaying.forEach((game) => {
+        scrollRow.appendChild(createGameCard(game));
+      });
 
       // O botão abre o modal com todos os jogos
       const viewAllBtn = playingSection.querySelector('.view-all-btn');

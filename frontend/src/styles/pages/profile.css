@@ -125,6 +125,7 @@
     gap: 0.75rem;
     cursor: pointer;
     transition: transform 0.2s ease;
+    min-width: 0;
 }
 
 .current-game-card:hover {
@@ -132,6 +133,7 @@
 }
 
 .current-cover-wrapper {
+    width: 100%;
     background-color: var(--color-surface-container);
     border-radius: var(--radius-lg);
     overflow: hidden;

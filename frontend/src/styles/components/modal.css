@@ -2,12 +2,45 @@
    View All Modal
    ------------------------ */
 
+.view-all-overlay {
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    animation: popupFadeIn 0.3s ease forwards;
+}
+
 .view-all-modal {
     max-width: 1080px;
     max-height: calc(100vh - 4rem);
-    background-color: rgba(26, 25, 25, 0.6);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: linear-gradient(135deg, var(--color-surface-high), var(--color-surface-container));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 32px 80px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-lg);
+    display: flex;
+    flex-direction: column;
+    animation: popupSlideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes popupFadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes popupSlideUp {
+    from {
+        transform: translateY(40px) scale(0.95);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
 }
 
 .view-all-header {
@@ -118,52 +151,6 @@
     gap: 1rem;
 }
 
-.view-all-summary-card {
-    background-color: var(--color-surface-high);
-    border-radius: var(--radius-lg);
-    padding: 1.1rem 1.25rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-}
-
-.view-all-summary-label {
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 1.4px;
-    text-transform: uppercase;
-    color: var(--color-outline);
-}
-
-.view-all-summary-content {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 1rem;
-}
-
-.view-all-summary-title {
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: var(--color-on-surface);
-    margin-bottom: 0.25rem;
-}
-
-.view-all-summary-copy {
-    font-size: 0.92rem;
-    line-height: 1.5;
-    color: var(--color-on-surface-variant);
-}
-
-.view-all-summary-count {
-    flex-shrink: 0;
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: var(--color-primary);
-    background-color: rgba(207, 150, 255, 0.12);
-    border-radius: var(--radius-full);
-    padding: 0.55rem 0.9rem;
-}
 
 .view-all-content {
     min-height: 0;
@@ -181,7 +168,8 @@
     gap: 1rem;
     padding: 0.95rem;
     border-radius: var(--radius-lg);
-    background-color: var(--color-surface-high);
+    background: rgba(30, 30, 30, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.05);
     transition:
         transform 0.2s ease,
         background-color 0.2s ease;
@@ -189,7 +177,8 @@
 
 .view-all-game-card:hover {
     transform: translateY(-3px);
-    background-color: var(--color-surface-bright);
+    background-color: rgba(40, 40, 40, 0.95);
+    border-color: rgba(255, 255, 255, 0.1);
 }
 
 .view-all-cover-wrapper {
@@ -255,6 +244,11 @@
     font-weight: 700;
     color: var(--color-on-surface);
     line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .view-all-game-dev {
@@ -266,6 +260,8 @@
     display: flex;
     flex-direction: column;
     gap: 0.45rem;
+    margin-top: auto;
+    grid-column: 1 / -1;
 }
 
 .view-all-review-label {
@@ -285,6 +281,13 @@
     line-clamp: 4;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    font-style: italic;
+    border-left: 3px solid var(--color-primary);
+    padding-left: 1rem;
+    background: rgba(255, 255, 255, 0.02);
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
 }
 
 .view-all-empty {
@@ -297,7 +300,8 @@
     gap: 0.75rem;
     padding: 2rem;
     border-radius: var(--radius-lg);
-    background-color: var(--color-surface-high);
+    background: rgba(30, 30, 30, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .view-all-empty-title {
@@ -418,10 +422,6 @@
 
     .view-all-body {
         padding: 0 1.25rem 1.25rem;
-    }
-
-    .view-all-summary-content {
-        flex-direction: column;
     }
 
     .view-all-pagination {

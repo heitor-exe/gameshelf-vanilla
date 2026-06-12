@@ -254,7 +254,7 @@ function renderRatingStars(rating) {
 // Ele aceita todos os jogos e permite escolher internamente a categoria ativa.
 export function openViewAllModal(games = [], optionsOrOnClose = {}) {
   let viewAllOverlay = document.createElement('div');
-  viewAllOverlay.className = 'ams-overlay';
+  viewAllOverlay.className = 'ams-overlay view-all-overlay';
 
   // Mantém compatibilidade com a assinatura antiga, que podia receber apenas onClose.
   const options = typeof optionsOrOnClose === 'function' ? { onClose: optionsOrOnClose } : optionsOrOnClose || {};
@@ -280,16 +280,6 @@ export function openViewAllModal(games = [], optionsOrOnClose = {}) {
       <div class="view-all-filters" role="tablist" aria-label="Shelf categories"></div>
 
       <div class="view-all-body">
-        <div class="view-all-summary-card">
-          <span class="view-all-summary-label">Selected category</span>
-          <div class="view-all-summary-content">
-            <div>
-              <h3 class="view-all-summary-title"></h3>
-              <p class="view-all-summary-copy"></p>
-            </div>
-            <span class="view-all-summary-count"></span>
-          </div>
-        </div>
         <div class="view-all-content"></div>
       </div>
     </div>
@@ -301,9 +291,6 @@ export function openViewAllModal(games = [], optionsOrOnClose = {}) {
   // Referências aos nós que serão atualizados dinamicamente sempre que o usuário
   // trocar de categoria dentro do popup.
   const filtersContainer = viewAllOverlay.querySelector('.view-all-filters');
-  const summaryTitle = viewAllOverlay.querySelector('.view-all-summary-title');
-  const summaryCopy = viewAllOverlay.querySelector('.view-all-summary-copy');
-  const summaryCount = viewAllOverlay.querySelector('.view-all-summary-count');
   const contentContainer = viewAllOverlay.querySelector('.view-all-content');
 
   // Renderiza os botões das categorias mostrando também a quantidade de jogos em cada uma.
@@ -352,13 +339,13 @@ export function openViewAllModal(games = [], optionsOrOnClose = {}) {
             <h3 class="view-all-game-title">${game.title}</h3>
             <span class="view-all-game-dev">${game.developer}</span>
           </div>
+        </div>
 
-          <div class="view-all-review-block">
-            <span class="view-all-review-label">Your review</span>
-            <p class="view-all-review">
-              ${review || 'You have not added a review snippet for this game yet.'}
-            </p>
-          </div>
+        <div class="view-all-review-block">
+          <span class="view-all-review-label">Your review</span>
+          <p class="view-all-review">
+            ${review || 'You have not added a review snippet for this game yet.'}
+          </p>
         </div>
       </article>
     `;
@@ -377,10 +364,6 @@ export function openViewAllModal(games = [], optionsOrOnClose = {}) {
 
     const startIndex = (currentPage - 1) * VIEW_ALL_PAGE_SIZE;
     const paginatedGames = filteredGames.slice(startIndex, startIndex + VIEW_ALL_PAGE_SIZE);
-
-    summaryTitle.textContent = meta.label;
-    summaryCopy.textContent = meta.helper;
-    summaryCount.textContent = `${filteredGames.length} game${filteredGames.length === 1 ? '' : 's'}`;
 
     if (!filteredGames.length) {
       contentContainer.innerHTML = `

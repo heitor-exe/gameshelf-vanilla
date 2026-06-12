@@ -9,6 +9,7 @@ import authRouter from './routes/auth.js';
 import shelfRouter from './routes/shelf.js';
 import profileRouter from './routes/profile.js';
 import feedRouter from './routes/feed.js';
+import igdbRouter from './routes/igdb.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -45,6 +46,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/shelf', shelfRouter);
 app.use('/api/profile', profileRouter);
 app.use('/api/feed', feedRouter);
+app.use('/api/igdb', igdbRouter);
 
 app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok' });

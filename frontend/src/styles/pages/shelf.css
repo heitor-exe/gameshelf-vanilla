@@ -82,6 +82,7 @@
     gap: 0.75rem;
     cursor: pointer;
     transition: transform 0.2s ease;
+    min-width: 0;
 }
 
 .shelf-game-card:hover {
@@ -89,6 +90,7 @@
 }
 
 .shelf-cover-wrapper {
+    width: 100%;
     position: relative;
     background-color: var(--color-surface-container);
     border-radius: var(--radius-md);
