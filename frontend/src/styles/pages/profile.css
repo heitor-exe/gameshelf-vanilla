@@ -3,18 +3,15 @@
     grid-template-columns: 320px 1fr;
     gap: 4rem;
     align-items: start;
-    padding-bottom: 4rem;
+    padding-bottom: 0 !important; /* Remove padding so sidebar doesn't slide up at the end */
 }
 
 .profile-sidebar {
     position: sticky;
-    top: 2rem;
+    top: 80px; /* Match the padding-top of .page-container so it never moves */
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
-    max-height: calc(100vh - 4rem);
-    overflow-y: auto;
-    scrollbar-width: none;
+    gap: 1.25rem;
 }
 
 .profile-sidebar::-webkit-scrollbar {
@@ -47,12 +44,13 @@
     display: flex;
     flex-direction: column;
     gap: 3rem;
+    padding-bottom: 4rem;
 }
 
 .profile-header {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1.25rem;
     align-items: flex-start;
 }
 
@@ -61,8 +59,8 @@
 }
 
 .profile-avatar {
-    width: 120px;
-    height: 120px;
+    width: 100px;
+    height: 100px;
     border-radius: var(--radius-md);
     border: 3px solid var(--color-primary);
     object-fit: cover;
