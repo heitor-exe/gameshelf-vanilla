@@ -1,12 +1,12 @@
 // ---------------------------------------------------------------
-// GameShelf - Client-Side API Helper with Express Session Support
+// GameShelf - Helper de API no Cliente com Suporte a Sessão Express
 // ---------------------------------------------------------------
 
 const BASE_URL = 'http://localhost:3001/api';
 
 /**
- * Custom fetch wrapper that automatically handles credentials (session cookies)
- * and content headers.
+ * Wrapper personalizado do fetch que lida automaticamente com credenciais (cookies de sessão)
+ * e cabeçalhos de conteúdo.
  */
 async function request(endpoint, options = {}) {
   const url = `${BASE_URL}${endpoint}`;
@@ -21,8 +21,8 @@ async function request(endpoint, options = {}) {
       ...defaultHeaders,
       ...options.headers,
     },
-    // CRITICAL: credentials 'include' forces the browser to send/receive cookies
-    // between frontend (localhost:5173) and backend (localhost:3001)
+    // CRÍTICO: credentials 'include' força o navegador a enviar/receber cookies
+    // entre frontend (localhost:5173) e backend (localhost:3001)
     credentials: 'include',
   };
 
@@ -48,12 +48,12 @@ async function request(endpoint, options = {}) {
 }
 
 // ---------------------------------------------------------------
-// Authentication Endpoints
+// Endpoints de Autenticação
 // ---------------------------------------------------------------
 
 export const authAPI = {
   /**
-   * Registers a new user.
+   * Registra um novo usuário.
    * @param {Object} userData { username, email, password }
    */
   register(userData) {
@@ -64,7 +64,7 @@ export const authAPI = {
   },
 
   /**
-   * Logs in a user.
+   * Faz o login de um usuário.
    * @param {Object} credentials { email, password }
    */
   login(credentials) {
@@ -75,7 +75,7 @@ export const authAPI = {
   },
 
   /**
-   * Logs out the current user.
+   * Faz o logout do usuário atual.
    */
   logout() {
     return request('/auth/logout', {
@@ -84,7 +84,7 @@ export const authAPI = {
   },
 
   /**
-   * Fetches the current user profile based on the active session.
+   * Busca o perfil do usuário atual com base na sessão ativa.
    */
   getMe() {
     return request('/auth/me', {
@@ -94,12 +94,12 @@ export const authAPI = {
 };
 
 // ---------------------------------------------------------------
-// Shelf Endpoints
+// Endpoints da Prateleira (Shelf)
 // ---------------------------------------------------------------
 
 export const shelfAPI = {
   /**
-   * Fetches the user's shelf and profile.
+   * Busca a prateleira e o perfil do usuário.
    * @param {string} username
    */
   getShelf(username) {
@@ -109,7 +109,7 @@ export const shelfAPI = {
   },
 
   /**
-   * Adds a new game to the shelf.
+   * Adiciona um novo jogo à prateleira.
    * @param {Object} gameData { rawg_game_id, game_title, game_cover_url, game_genres, status, rating, review }
    */
   addGame(gameData) {
@@ -120,7 +120,7 @@ export const shelfAPI = {
   },
 
   /**
-   * Updates an existing game in the shelf.
+   * Atualiza um jogo existente na prateleira.
    * @param {string} entryId
    * @param {Object} updates { status, rating, review }
    */
@@ -132,7 +132,7 @@ export const shelfAPI = {
   },
 
   /**
-   * Deletes a game from the shelf.
+   * Remove um jogo da prateleira.
    * @param {string} entryId
    */
   deleteGame(entryId) {
@@ -143,27 +143,36 @@ export const shelfAPI = {
 };
 
 // ---------------------------------------------------------------
-// Feed Endpoints
+// Endpoints do Feed
 // ---------------------------------------------------------------
 
 export const feedAPI = {
   /**
-   * Fetches the global feed of recent shelf activities.
+   * Busca o feed global de atividades recentes nas prateleiras.
    */
   getGlobalFeed() {
     return request('/feed', {
       method: 'GET',
     });
   },
+
+  /**
+   * Busca notícias em alta (trending) através do proxy do backend.
+   */
+  getTrendingNews() {
+    return request('/feed/trending', {
+      method: 'GET',
+    });
+  },
 };
 
 // ---------------------------------------------------------------
-// Profile Endpoints
+// Endpoints de Perfil
 // ---------------------------------------------------------------
 
 export const profileAPI = {
   /**
-   * Fetches a specific user's profile and their shelf statistics.
+   * Busca o perfil de um usuário específico e suas estatísticas da prateleira.
    * @param {string} username
    */
   getProfile(username) {

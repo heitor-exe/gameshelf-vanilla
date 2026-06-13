@@ -26,4 +26,23 @@ router.get('/', async (req, res) => {
   }
 });
 
+router.get('/trending', async (req, res) => {
+  try {
+    // Mudamos do Polygon para o RSS do GameSpot porque o Polygon não
+    // fornece mais um sub-feed dedicado apenas a notícias de jogos.
+    const rssUrl = encodeURIComponent('https://www.gamespot.com/feeds/game-news/');
+    const response = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${rssUrl}`);
+    
+    if (!response.ok) {
+      throw new Error(`News API error: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    res.json(data);
+  } catch (error) {
+    console.error('Error fetching trending news:', error);
+    res.status(500).json({ error: 'Failed to fetch trending news' });
+  }
+});
+
 export default router;
