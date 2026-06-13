@@ -341,6 +341,8 @@ export async function renderProfile(container, username = window.currentUser?.us
   const loadingWrapper = document.createElement("div");
   loadingWrapper.style.width = "100%";
   loadingWrapper.style.textAlign = "center";
+  loadingWrapper.style.gridColumn = "1 / -1"; // Ocupa ambas as colunas do layout Grid do perfil
+  loadingWrapper.style.paddingTop = "4rem"; // Adiciona espaço vertical para centralizar melhor
   loadingWrapper.appendChild(loadingText);
   
   pageContainer.appendChild(loadingWrapper);
