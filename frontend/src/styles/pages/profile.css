@@ -11,7 +11,7 @@
     top: 2rem;
     display: flex;
     flex-direction: column;
-    gap: 3rem;
+    gap: 1.5rem;
     max-height: calc(100vh - 4rem);
     overflow-y: auto;
     scrollbar-width: none;
@@ -19,6 +19,28 @@
 
 .profile-sidebar::-webkit-scrollbar {
     display: none;
+}
+
+/* Edit Profile Button */
+.edit-profile-btn {
+    transition: all 0.2s ease;
+}
+
+.edit-profile-btn:hover {
+    border-color: var(--color-primary) !important;
+}
+
+.edit-profile-icon {
+    width: 18px;
+    height: 18px;
+    background-color: var(--color-on-surface-variant);
+    -webkit-mask: url('/icons/edit.svg') no-repeat center / contain;
+    mask: url('/icons/edit.svg') no-repeat center / contain;
+    transition: background-color 0.2s ease;
+}
+
+.edit-profile-btn:hover .edit-profile-icon {
+    background-color: var(--color-primary);
 }
 
 .profile-feed {

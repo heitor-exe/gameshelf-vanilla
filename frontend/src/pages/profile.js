@@ -407,9 +407,11 @@ export async function renderProfile(container, username = window.currentUser?.us
         <img src="${profile.avatar}" alt="${profile.username}" class="profile-avatar">
       </div>
       <div class="profile-info-col" style="width: 100%;">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 1rem;">
           <h1 class="profile-username">${profile.username}</h1>
-          ${isOwnProfile ? `<button class="btn-ghost edit-profile-btn" style="font-size: 0.8rem; padding: 0.4rem 0.8rem; border: 1px solid var(--color-outline-variant);">EDIT PROFILE</button>` : ''}
+          ${isOwnProfile ? `<button class="btn-ghost edit-profile-btn" title="Edit Profile" style="display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; padding: 0; border: 1px solid var(--color-outline-variant); border-radius: 8px;">
+            <div class="edit-profile-icon"></div>
+          </button>` : ''}
         </div>
         <p class="profile-bio">${profile.bio}</p>
         <div class="profile-meta-row">

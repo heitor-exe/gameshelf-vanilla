@@ -64,14 +64,14 @@ router.get('/:username', async (req, res) => {
       mostFrequentGenre
     };
 
-    // 3. Fetch 4 most recent "playing"
+    // 3. Fetch 3 most recent "playing"
     const { data: recentPlaying, error: playingError } = await supabase
       .from('shelf_entries')
       .select('*')
       .eq('user_id', profile.id)
       .eq('status', 'playing')
       .order('created_at', { ascending: false })
-      .limit(4);
+      .limit(3);
 
     // 4. Fetch 3 most recent with review text
     const { data: recentReviews, error: reviewsError } = await supabase
