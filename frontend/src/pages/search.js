@@ -73,7 +73,7 @@ function showGridLoading(gridContainer, replace = true) {
   loader.className = 'search-grid-loader';
   loader.innerHTML = `
     <div class="search-spinner"></div>
-    <p class="search-loading-text">Carregando jogos...</p>
+    <p class="search-loading-text">Loading games...</p>
   `;
   gridContainer.appendChild(loader);
 }
@@ -133,7 +133,7 @@ export async function renderSearch(container) {
   // Filtros de gênero — serão preenchidos assincronamente
   const filtersContainer = document.createElement('div');
   filtersContainer.className = 'filter-pills';
-  filtersContainer.innerHTML = `<span class="filter-pills-loading">Carregando gêneros...</span>`;
+  filtersContainer.innerHTML = `<span class="filter-pills-loading">Loading genres...</span>`;
 
   searchHeader.appendChild(searchWrapper);
   searchHeader.appendChild(filtersContainer);
@@ -170,7 +170,7 @@ export async function renderSearch(container) {
       loadMoreBtn.style.display = 'none';
     } else {
       // Loading sutil no botão durante append
-      loadMoreBtn.textContent = 'Carregando...';
+      loadMoreBtn.textContent = 'Loading...';
       loadMoreBtn.disabled = true;
     }
 
@@ -193,7 +193,7 @@ export async function renderSearch(container) {
       _hasMore = hasMore;
 
       if (results.length === 0 && !append) {
-        showGridMessage(gridContainer, 'Nenhum jogo encontrado. Tente outro termo ou gênero.');
+        showGridMessage(gridContainer, 'No games found. Try a different term or genre.');
         loadMoreBtn.style.display = 'none';
         return;
       }
@@ -210,7 +210,7 @@ export async function renderSearch(container) {
     } catch (error) {
       console.error('[search] Erro na busca:', error);
       if (!append) {
-        showGridMessage(gridContainer, 'Não foi possível conectar à API. Tente novamente.', true);
+        showGridMessage(gridContainer, 'Could not connect to the API. Please try again.', true);
       }
       loadMoreBtn.style.display = 'none';
     } finally {
@@ -261,7 +261,7 @@ export async function renderSearch(container) {
 
     } catch (error) {
       console.error('[search] Erro ao carregar gêneros:', error);
-      filtersContainer.innerHTML = `<span style="color: var(--color-on-surface-variant); font-size: 0.85rem;">Não foi possível carregar os gêneros.</span>`;
+      filtersContainer.innerHTML = `<span style="color: var(--color-on-surface-variant); font-size: 0.85rem;">Could not load genres.</span>`;
     }
   }
 

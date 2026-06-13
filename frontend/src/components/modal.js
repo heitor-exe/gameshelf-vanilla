@@ -158,7 +158,7 @@ export function openModal(game, onSave, optionsOrOnDelete) {
   // Delete button
   if (isEditMode) {
     overlay.querySelector('.ams-delete-btn').addEventListener('click', () => {
-      if (confirm(`Tem certeza que deseja remover "${game.title}" da sua shelf?`)) {
+      if (confirm(`Are you sure you want to remove "${game.title}" from your shelf?`)) {
         console.log('[modal] deleted:', game.id);
         closeModal();
         if (typeof onDelete === 'function') {

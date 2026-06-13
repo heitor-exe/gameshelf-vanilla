@@ -27,7 +27,7 @@ async function route() {
     app.innerHTML = `
       <div class="auth-loading-overlay">
         <div class="auth-spinner"></div>
-        <p style="font-family: var(--font-family); color: var(--color-on-surface-variant); font-size: 0.95rem; font-weight: 500; letter-spacing: 0.5px;">Carregando GameShelf...</p>
+        <p style="font-family: var(--font-family); color: var(--color-on-surface-variant); font-size: 0.95rem; font-weight: 500; letter-spacing: 0.5px;">Loading GameShelf...</p>
       </div>
     `;
     try {
