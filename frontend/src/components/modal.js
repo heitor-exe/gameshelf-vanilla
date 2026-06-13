@@ -142,6 +142,7 @@ export function openModal(game, onSave, optionsOrOnDelete) {
         id: game.id,
         title: game.title,
         cover_url: game.cover || game.cover_url || game.background_image || '',
+        genres: game.genres || [],
         status: statusPill ? statusPill.dataset.value : 'playing',
         rating: parseInt(starsContainer.dataset.rating) || 0,
         review_snippet: overlay.querySelector('.ams-textarea').value.trim(),
