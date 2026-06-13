@@ -180,4 +180,15 @@ export const profileAPI = {
       method: 'GET',
     });
   },
+
+  /**
+   * Atualiza o perfil do usuário logado (bio, username e imagem de avatar).
+   * @param {Object} updates { bio, username, avatar_base64 }
+   */
+  updateProfile(updates) {
+    return request('/profile', {
+      method: 'PUT',
+      body: updates,
+    });
+  },
 };

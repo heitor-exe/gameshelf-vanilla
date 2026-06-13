@@ -99,10 +99,11 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ error: 'Credenciais inválidas.' });
     }
 
-    // 2. Busca o username na tabela profiles
+    // 2. Busca o username e avatar_url na tabela profiles
+    // Solicitamos também o avatar_url para atualizar a UI do usuário no frontend imediatamente após o login.
     const { data: profile, error: profileError } = await supabase
       .from('profiles')
-      .select('username')
+      .select('username, avatar_url')
       .eq('id', user.id)
       .single();
 
@@ -119,6 +120,7 @@ router.post('/login', async (req, res) => {
       user: {
         id: user.id,
         username: profile.username,
+        avatar_url: profile.avatar_url,
       },
     });
   } catch (error) {
