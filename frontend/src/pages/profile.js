@@ -134,26 +134,26 @@ function createGameCard(game) {
   return card;
 }
 
-// Função utilitária que gera os "Cards" horizontais para a seção "Recently Reviewed"
+// Função utilitária que gera os "Cards" para a seção "Recently Reviewed" no Feed
 function createReviewCard(review, index, game) {
   const card = document.createElement('article');
   
-  // Lógica de design dinâmica: inverte a posição da imagem (esquerda/direita) dependendo se a linha for par/ímpar
-  const isOdd = index % 2 === 1;
-  const altLayout = isOdd ? 'layout-cover-left' : 'layout-cover-right';
-
-  card.className = `review-card ${altLayout}`;
+  card.className = `review-card`;
 
   card.innerHTML = `
+    <div class="review-header">
+      <div class="review-title-group">
+        <h3 class="review-game-title">${review.game_title}</h3>
+        <span class="review-stars">${generateStars(review.starRating)}</span>
+      </div>
+      <div class="review-meta">
+        <span class="review-timestamp">REVIEW • ${review.timeAgo}</span>
+      </div>
+    </div>
     <div class="review-cover-col">
       <img src="${review.cover_url}" alt="${review.game_title}" class="review-cover">
     </div>
     <div class="review-content-col">
-      <div class="review-meta">
-        <span class="review-stars">${generateStars(review.starRating)}</span>
-        <span class="review-timestamp">REVIEW • ${review.timeAgo}</span>
-      </div>
-      <h3 class="review-game-title">${review.game_title}</h3>
       <p class="review-text">${review.reviewText}</p>
       <!-- Só mostraremos botão se o jogo estiver carregado para o modal -->
       ${game ? `<button class="btn-ghost">READ FULL REVIEW</button>` : ''}
@@ -387,6 +387,13 @@ export async function renderProfile(container, username = window.currentUser?.us
       timeAgo: game.created_at ? timeAgo(new Date(game.created_at)) : 'Recently',
     }));
 
+    // Criamos as duas colunas principais do novo layout Grid
+    const sidebar = document.createElement('aside');
+    sidebar.className = 'profile-sidebar';
+
+    const feed = document.createElement('main');
+    feed.className = 'profile-feed';
+
     // Sessão do Cabeçalho (Foto de Perfil, Nome, Bio e Botão de Editar)
     const header = document.createElement('header');
     header.className = 'profile-header';
@@ -399,7 +406,7 @@ export async function renderProfile(container, username = window.currentUser?.us
       <div class="profile-avatar-col">
         <img src="${profile.avatar}" alt="${profile.username}" class="profile-avatar">
       </div>
-      <div class="profile-info-col" style="flex: 1;">
+      <div class="profile-info-col" style="width: 100%;">
         <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;">
           <h1 class="profile-username">${profile.username}</h1>
           ${isOwnProfile ? `<button class="btn-ghost edit-profile-btn" style="font-size: 0.8rem; padding: 0.4rem 0.8rem; border: 1px solid var(--color-outline-variant);">EDIT PROFILE</button>` : ''}
@@ -425,7 +432,7 @@ export async function renderProfile(container, username = window.currentUser?.us
         </div>
       </div>
     `;
-    pageContainer.appendChild(header);
+    sidebar.appendChild(header);
 
     // Verifica se o dono do perfil é o próprio usuário logado
     if (isOwnProfile) {
@@ -449,11 +456,11 @@ export async function renderProfile(container, username = window.currentUser?.us
           <h2 class="section-title">Currently Playing</h2>
           <button class="btn-ghost view-all-btn">VIEW ALL</button>
         </div>
-        <div class="playing-scroll-row"></div>
+        <div class="playing-stack"></div>
       `;
-      pageContainer.appendChild(playingSection);
+      sidebar.appendChild(playingSection);
 
-      const scrollRow = playingSection.querySelector('.playing-scroll-row');
+      const scrollRow = playingSection.querySelector('.playing-stack');
       recentPlaying.forEach((game) => {
         scrollRow.appendChild(createGameCard(game));
       });
@@ -488,7 +495,7 @@ export async function renderProfile(container, username = window.currentUser?.us
         reviewsList.appendChild(createReviewCard(review, i, null));
       });
       reviewsSection.appendChild(reviewsList);
-      pageContainer.appendChild(reviewsSection);
+      feed.appendChild(reviewsSection);
     }
 
     // Footer / Share Section
@@ -509,7 +516,11 @@ export async function renderProfile(container, username = window.currentUser?.us
         </button>
       </div>
     `;
-    pageContainer.appendChild(footer);
+    sidebar.appendChild(footer);
+
+    // Adiciona a sidebar e o feed ao contêiner da página
+    pageContainer.appendChild(sidebar);
+    pageContainer.appendChild(feed);
 
     // Copy button interaction
     const copyBtn = footer.querySelector('.share-copy-btn');
