@@ -34,6 +34,13 @@ async function request(endpoint, options = {}) {
   const data = await response.json().catch(() => ({}));
 
   if (!response.ok) {
+    // Se recebermos um 401 (Não Autorizado) e não for uma rota de autenticação,
+    // o token/sessão expirou. Redirecionamos para o login limpando o estado.
+    if (response.status === 401 && !endpoint.startsWith('/auth/')) {
+      window.currentUser = null;
+      window.location.href = '/login';
+    }
+    
     throw new Error(data.error || 'Algo deu errado.');
   }
 
