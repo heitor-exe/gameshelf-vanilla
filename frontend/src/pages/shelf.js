@@ -103,7 +103,29 @@ export function renderShelf(container) {
     // Obtém a lista de jogos e calcula as estatísticas.
     const games = getShelfGames();
     const totalGames = games.length;
-    const topGenre = 'RPG';
+
+    let topGenre = '-';
+
+    // Calcula o gênero mais frequente na prateleira.
+    if (games.length > 0) {
+      const genreCounts = {};
+      games.forEach(g => {
+        if (g.genres && Array.isArray(g.genres)) {
+          g.genres.forEach(genre => {
+            genreCounts[genre] = (genreCounts[genre] || 0) + 1;
+          });
+        }
+      });
+
+      // Encontra o gênero com a maior contagem.
+      let maxCount = 0;
+      for (const [genre, count] of Object.entries(genreCounts)) {
+        if (count > maxCount) {
+          maxCount = count;
+          topGenre = genre;
+        }
+      }
+    }
 
     // Calcula o número de jogos concluídos.
     const completedCount = games.filter((g) => g.status === 'completed').length;
