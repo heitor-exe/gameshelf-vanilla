@@ -2,7 +2,7 @@
 // GameShelf - Helper de API no Cliente com Suporte a Sessão Express
 // ---------------------------------------------------------------
 
-const BASE_URL = 'http://localhost:3001/api';
+const BASE_URL = import.meta.env.PROD ? '/api' : 'http://localhost:3001/api';
 
 /**
  * Wrapper personalizado do fetch que lida automaticamente com credenciais (cookies de sessão)

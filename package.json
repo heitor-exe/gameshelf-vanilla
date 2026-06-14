@@ -1,0 +1,8 @@
+{
+  "name": "gameshelf-vanilla",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ]
+}
