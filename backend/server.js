@@ -12,6 +12,7 @@ import feedRouter from './routes/feed.js';
 import igdbRouter from './routes/igdb.js';
 
 const app = express();
+app.set('trust proxy', 1); // Confia no proxy da Vercel para permitir cookies seguros
 const PORT = process.env.PORT || 3000;
 
 // Configuração do CORS (Cross-Origin Resource Sharing)
