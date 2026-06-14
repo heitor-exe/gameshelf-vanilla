@@ -6,7 +6,7 @@
 // O IGDB não suporta CORS, portanto o backend é obrigatório.
 // ---------------------------------------------------------------
 
-const BASE_URL = 'http://localhost:3001/api/igdb';
+const BASE_URL = import.meta.env.PROD ? '/api/igdb' : 'http://localhost:3001/api/igdb';
 
 // Cache local de gêneros (raramente muda)
 let _genresCache = null;
