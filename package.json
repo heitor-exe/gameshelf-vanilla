@@ -1,6 +1,7 @@
 {
   "name": "gameshelf-vanilla",
   "private": true,
+  "type": "module",
   "workspaces": [
     "frontend",
     "backend"
