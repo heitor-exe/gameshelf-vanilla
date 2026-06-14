@@ -1,88 +1,99 @@
-# 🎮 GameShelf
+<div align="center">
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Vite-6495ED?style=for-the-badge&logo=vite&logoColor=white" alt="Vite" />
-  <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" alt="JavaScript" />
-  <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white" alt="CSS3" />
-  <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node.js" />
-  <img src="https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=express&logoColor=white" alt="Express" />
-  <img src="https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white" alt="Supabase" />
-  <img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL" />
-</p>
+  # 🎮 GameShelf
+
+  **Sua biblioteca pessoal e premium de jogos.**<br>
+  Organize sua coleção, escreva análises detalhadas e acompanhe seus jogos favoritos.
+
+  <p align="center">
+    <img src="https://img.shields.io/badge/Vite-6495ED?style=for-the-badge&logo=vite&logoColor=white" alt="Vite" />
+    <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" alt="JavaScript" />
+    <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node.js" />
+    <img src="https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=express&logoColor=white" alt="Express" />
+    <img src="https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white" alt="Supabase" />
+    <img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL" />
+  </p>
+
+  <p align="center">
+    <a href="#-sobre">Sobre</a> •
+    <a href="#-funcionalidades">Funcionalidades</a> •
+    <a href="#-tecnologias">Tecnologias</a> •
+    <a href="#-como-executar">Como Executar</a> •
+    <a href="#-design-system">Design</a> •
+    <a href="#-licença">Licença</a>
+  </p>
+</div>
 
 ---
 
 ## 🌟 Sobre o Projeto
 
-O **GameShelf** é uma biblioteca de jogos pessoal e premium, projetada para permitir que você organize sua coleção de games, escreva análises detalhadas e acompanhe a atividade de jogos dos seus amigos.
+O **GameShelf** é uma aplicação web completa desenvolvida com foco absoluto em **alto desempenho e imersão visual**. Construído no formato de *monorepo*, o projeto utiliza **Vanilla JavaScript (ES Modules)** no frontend para garantir leveza máxima, dispensando frameworks pesados, e é suportado por um backend robusto em **Node.js** com banco de dados e autenticação providos pelo **Supabase**.
 
-Este projeto foi construído no formato de **monorepo** com foco absoluto em **alto desempenho**, utilizando **Vanilla JavaScript (ES Modules)** no frontend e um sistema de design customizado moderno e imersivo (Glassmorphism e Dark Mode).
+O objetivo principal do projeto é oferecer uma experiência de usuário (UX) premium para gamers que desejam um espaço pessoal, elegante e rápido para catalogar suas jornadas virtuais.
 
 ---
 
 ## ✨ Funcionalidades Principais
 
-- 👤 **Área de Perfil**: Personalização de perfil de usuário com avatar e biografia.
-- 📚 **Biblioteca Pessoal**: Gerencie seus jogos categorizados por status ("Jogando", "Concluído", "Abandonado", "Lista de Desejos").
-- ✍️ **Avaliações de Jogos**: Dê notas de 1 a 5 estrelas e escreva resenhas detalhadas de cada game.
-- 📰 **Feed de Atividades**: Acompanhe o fluxo dinâmico de resenhas e atualizações de estantes.
-- 🎨 **Design System Premium**: Interface escura elegante baseada em Glassmorphism (`backdrop-filter: blur(20px)`), sombras profundas e transições suaves sem bordas de 1px artificiais.
+- 👤 **Área de Perfil**: Personalização completa de perfil, com biografia e avatares dinâmicos (integração com a API do Dicebear baseada no username do usuário).
+- 📚 **Biblioteca Pessoal (Shelf)**: Gerencie seus jogos categorizando-os em status organizados: "Jogando", "Concluído", "Abandonado" ou "Lista de Desejos".
+- ✍️ **Avaliações e Notas**: Atribua notas (1 a 5 estrelas) e escreva resenhas detalhadas documentando sua experiência e opinião sobre cada game.
+- 📰 **Feed de Atividades**: Explore um feed dinâmico e global com as últimas resenhas e atualizações de estantes da comunidade.
+- 🔍 **Busca de Jogos (Em breve)**: Estrutura base pronta para integração com a API do RAWG, visando busca rápida e preenchimento automático de dados dos jogos.
+- 🔒 **Autenticação Segura**: Sistema robusto de Login e Registro protegido pelo Supabase Auth e gerenciamento de sessões criptografadas.
 
 ---
 
 ## 🛠️ Tecnologias Utilizadas
 
-| Componente | Tecnologia | Descrição |
-| :--- | :--- | :--- |
-| **Frontend** | **Vanilla JS (ES6+)** | Lógica de rotas e componentes reativos sem frameworks pesados |
-| **Build Tool** | **Vite** | Empacotador extremamente rápido para desenvolvimento moderno |
-| **Estilização** | **CSS3 Puro** | Sistema de tokens centralizado e flexível em `tokens.css` |
-| **Backend** | **Node.js + Express** | API REST estruturada para gerenciar autenticação, feed e estantes |
-| **Banco de Dados**| **Supabase (PostgreSQL)** | Banco de dados relacional na nuvem com autenticação segura integrada |
+A stack foi escolhida para proporcionar o melhor balanço entre controle técnico absoluto e alta fidelidade visual.
 
----
+### 🎨 Frontend
+- **Vanilla JS (ES Modules)**: Controle nativo de rotas (SPA router em `main.js`) e reatividade via DOM manipulation direta.
+- **Vite**: Build tool e servidor de desenvolvimento ultrarrápido, garantindo Hot Module Replacement instantâneo.
+- **CSS3 Puro**: Arquitetura orientada a tokens (`tokens.css`), permitindo consistência sem dependência de bibliotecas CSS in JS ou Tailwind.
 
-## 📁 Estrutura de Diretórios
+### ⚙️ Backend
+- **Node.js & Express**: API RESTful bem estruturada para orquestrar todas as chamadas ao banco de dados e prover endpoints consumíveis.
+- **Connect-PG-Simple**: Gerenciamento de sessões seguras persistidas no Postgres via cookies (`connect.sid`).
 
-```text
-gameshelf-vanilla/
-├── frontend/             # Aplicação SPA (Vite)
-│   ├── src/
-│   │   ├── components/   # Componentes visuais (Navbar, GameCard, Modais)
-│   │   ├── pages/        # Telas da aplicação (Home, Search, Shelf, Profile)
-│   │   ├── styles/       # Tokens de Design e estilos globais
-│   │   └── lib/          # Clientes de API e gerenciador de estado local
-│   └── index.html
-├── backend/              # Servidor API (Express)
-│   ├── routes/           # Endpoints da API (Auth, Feed, Profile, Shelf)
-│   ├── middleware/       # Middlewares de segurança e validação
-│   └── server.js         # Ponto de entrada da API
-└── README.md             # Documentação do projeto
-```
+### 🗄️ Infraestrutura e Dados
+- **Supabase**: Backend as a Service (BaaS) gerenciando autenticação e o banco de dados PostgreSQL.
+- **Vercel**: Deploy simplificado do frontend com `vercel.json` já configurado para rotas SPA (Single Page Application rewrites).
 
 ---
 
 ## 🎨 Sistema de Design (Design System)
 
-A estética visual do GameShelf foi construída para parecer um produto state-of-the-art:
-* **Paleta de Cores**: Fundo ultra-escuro elegante (`#0e0e0e` a `#2c2c2c`) com detalhes vibrantes em **Lavender** (`#cf96ff`).
-* **Estratégia de Superfície**: Zero uso de bordas de 1px. A profundidade dos cards e modais é criada puramente por variações harmoniosas de tom de fundo e sombras.
-* **Glassmorphic Glow**: Uso de desfoque de fundo avançado (`backdrop-filter: blur(20px)`) em modais e menus flutuantes.
-* **Tipografia**: Família de fontes **Inter** (pesos 400, 500, 700 e 800) importada diretamente do Google Fonts.
+A interface do GameShelf foge do padrão utilitarista, adotando uma estética visual de primeira classe projetada para impressionar:
+
+- 🌌 **Modo Escuro Imersivo**: Fundo profundo em tons escuros e elegantes (`#0e0e0e` a `#2c2c2c`), criando alto contraste com a cor primária vibrante **Lavender** (`#cf96ff`).
+- 🪞 **Glassmorphism Avançado**: Uso extensivo de superfícies vítreas (`backdrop-filter: blur(20px)`) a 60% de opacidade em elementos flutuantes, modais e menus de navegação.
+- 🖼️ **Ausência de Bordas Artificiais**: O projeto proíbe o uso de bordas sólidas de `1px`. Toda a sensação de profundidade e hierarquia é alcançada organicamente através de variações sutis no preenchimento de fundo e projeções de sombras calculadas.
+- 🔤 **Tipografia Moderna**: Importação da família tipográfica **Inter** direto do Google Fonts, garantindo um visual contemporâneo e máxima legibilidade.
 
 ---
 
-## 🚀 Como Executar o Projeto
+## 🚀 Como Executar Localmente
 
 ### Pré-requisitos
-* Node.js (v18 ou superior)
-* Conta no [Supabase](https://supabase.com/)
+- [Node.js](https://nodejs.org/en/) (v18+) instalado.
+- Conta gratuita configurada no [Supabase](https://supabase.com/).
 
----
+### 1. Clonando o Repositório
 
-### Passo 1: Configuração do Banco de Dados (Supabase)
+```bash
+git clone https://github.com/heitor-exe/gameshelf-vanilla.git
+cd gameshelf-vanilla
+```
 
-No editor SQL do seu projeto no Supabase, execute o script abaixo para criar as tabelas necessárias:
+### 2. Configurando o Banco de Dados (Supabase)
+
+Acesse o **SQL Editor** no painel de controle do seu projeto Supabase e execute as queries abaixo para criar a infraestrutura das tabelas e aplicar as Políticas de Segurança (Row Level Security):
+
+<details>
+<summary><b>🛠️ Mostrar Script SQL</b></summary>
 
 ```sql
 -- Criar tabela de perfis de usuário
@@ -120,51 +131,83 @@ create policy "Entries are publicly readable"
   on shelf_entries for select
   using (true);
 ```
+</details>
 
----
+### 3. Configurando as Variáveis de Ambiente (Backend)
 
-### Passo 2: Configuração das Variáveis de Ambiente
+Navegue até a pasta do backend, copie o arquivo de exemplo e configure suas credenciais:
 
-1. Vá para a pasta `backend/`.
-2. Duplique o arquivo `.env.example` e renomeie-o para `.env`.
-3. Preencha os campos com as credenciais do seu projeto Supabase:
-   ```env
-   PORT=3000
-   SUPABASE_URL=https://seu-projeto.supabase.co
-   SUPABASE_SERVICE_KEY=sua_chave_secreta_service_role
-   DATABASE_URL=postgresql://postgres.seu-projeto:[senha]@aws-0.pooler.supabase.com:6543/postgres
-   SESSION_SECRET=uma_chave_aleatoria_para_seguranca
-   FRONTEND_ORIGIN=http://localhost:5173
-   ```
+```bash
+cd backend
+cp .env.example .env
+```
+Abra o arquivo `.env` gerado e preencha com suas credenciais do projeto Supabase. 
+> ⚠️ **Atenção às Portas:** O frontend por padrão fará chamadas para a porta `3001` (vide `frontend/src/lib/api.js`). Certifique-se de configurar `PORT=3001` no backend e ajustar `FRONTEND_ORIGIN` apropriadamente se estiver rodando localmente.
 
----
+### 4. Iniciando os Servidores de Desenvolvimento
 
-### Passo 3: Executando o Servidor API (Backend)
+O projeto requer que o **Backend** e o **Frontend** sejam rodados em terminais separados.
 
-No seu terminal, vá para a pasta `backend` e execute:
-
+**Terminal 1 (Backend - API):**
 ```bash
 cd backend
 npm install
 npm run dev
 ```
-O servidor backend iniciará usando `nodemon` na porta configurada (geralmente `http://localhost:3000` ou `http://localhost:3001`).
 
----
-
-### Passo 4: Executando a Aplicação Web (Frontend)
-
-Abra outro terminal, vá para a pasta `frontend` e execute:
-
+**Terminal 2 (Frontend - SPA):**
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
-O servidor de desenvolvimento do Vite iniciará. Abra no seu navegador o endereço fornecido no terminal (geralmente `http://localhost:5173` ou `http://localhost:3000`).
+
+Abra o seu navegador no link disponibilizado pelo Vite no Terminal 2 (ex: `http://localhost:3000`) e divirta-se!
+
+---
+
+## 📁 Estrutura Detalhada do Monorepo
+
+```text
+gameshelf-vanilla/
+├── frontend/             # 🎨 Interface de Usuário (Vite SPA)
+│   ├── src/
+│   │   ├── components/   # Modulares: navbar.js, gameCard.js, modal.js
+│   │   ├── lib/          # Handlers: api.js, shelf-store.js, rawg.js (stub)
+│   │   ├── pages/        # Telas: home.js, search.js, profile.js, auth...
+│   │   ├── styles/       # Design System: tokens.css, global.css + pages css
+│   │   └── main.js       # Entrypoint JavaScript e Roteador Frontend
+│   ├── index.html        # Entrypoint HTML da aplicação
+│   └── vercel.json       # Configurações de Deploy (SPA rewrites)
+│
+└── backend/              # ⚙️ Servidor Lógico (Node.js/Express)
+    ├── lib/              # Configuração Supabase (supabase.js)
+    ├── middleware/       # Guards: auth.js (Proteção de rotas)
+    ├── routes/           # Módulos: auth.js, shelf.js, profile.js, feed.js
+    └── server.js         # Setup do Express, Sessions e CORS
+```
+
+---
+
+## 🤝 Como Contribuir
+
+Sinta-se livre para contribuir relatando *Bugs*, sugerindo melhorias ou enviando novos recursos através de *Pull Requests*.
+
+1. Faça o **Fork** do projeto.
+2. Crie uma **Branch** para a sua funcionalidade (`git checkout -b feature/SuaFuncionalidade`).
+3. Adicione suas alterações ao **Stage** (`git add .`).
+4. Realize o **Commit** das suas mudanças (`git commit -m 'feat: adicionado tal recurso'`).
+5. Dê um **Push** para a branch no repositório remoto (`git push origin feature/SuaFuncionalidade`).
+6. Abra um **Pull Request**.
 
 ---
 
 ## 📄 Licença
 
-Este projeto é de código aberto e está licenciado sob a [MIT License](LICENSE).
+Este projeto é de código aberto e distribuído sob a licença **MIT**. Sinta-se à vontade para usá-lo e modificá-lo livremente.
+
+---
+
+<div align="center">
+  <p>Desenvolvido com dedicação por <b><a href="https://github.com/heitor-exe">Heitor</a></b>.</p>
+</div>
